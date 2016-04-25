@@ -51,6 +51,8 @@ traci.lane.setDisallowed('26589743#2_3','bus')
 traci.lane.setDisallowed('26589743#3_2','bus')
 traci.lane.setDisallowed('26589743#3_3','bus')
 
+listo=False
+
 try:
     while step < 6000:
         step += 1
@@ -64,16 +66,20 @@ try:
             linea=v.partition(".")[0]
             nro=int(v.partition(".")[2])
             print linea+" "+str(nro)+" "+cuadra+" "+str(carril)+" "+tipo
+            if traci.vehicle.getLanePosition(v) > 40 and linea=="linea100" and nro==2 and not listo:
+               listo=True
+               traci.vehicle.setBusStop(v,'p1',5000)
+            
             if traci.vehicle.isAtBusStop(v):
                 print "************************* En parada:"+v
-                if linea=="linea100":
-                    if nro>=ult100:
-                      ult100=ult100+1
-                      traci.vehicle.setBusStop(v,'p1',3000)
+                #if linea=="linea100":
+                #    if nro>=ult100:
+                #      ult100=ult100+1
+                #      traci.vehicle.setBusStop(v,'p1',000)
                 if linea=="linea101":
                     if nro>=ult101:
                       ult101=ult101+1
-                      traci.vehicle.setBusStop(v,'p2',2000)
+                      traci.vehicle.setBusStop(v,'p2',000)
             
 
 except traci.FatalTraCIError:
