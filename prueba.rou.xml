@@ -1,0 +1,13 @@
+<flows>
+  <flow id="linea100" begin="0" end="7200" period="10" type="bus_100">
+    <route edges="26589743#1 26589743#2 26589743#3">
+      <stop busStop="p1" duration="0"/>
+    </route>
+  </flow>
+
+  <flow id="linea101" begin="0" end="7200" period="15" type="bus_101">
+    <route edges="-304664096 26589740 304664094#0 26589743#2 26589743#3">
+      <stop busStop="p2" duration="0"/>
+    </route>
+  </flow>
+</flows>
