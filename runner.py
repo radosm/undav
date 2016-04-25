@@ -39,6 +39,18 @@ traci.init(PORT)
 ult100=0
 ult101=0
 
+traci.lane.setDisallowed('-304664096_0','bus')
+
+# Primera cuadra de Belgrano
+traci.lane.setDisallowed('26589743#1_2','bus')
+traci.lane.setDisallowed('26589743#1_3','bus')
+# Segunda cuadra de Belgrano
+traci.lane.setDisallowed('26589743#2_2','bus')
+traci.lane.setDisallowed('26589743#2_3','bus')
+# Tercera cuadra de Belgrano
+traci.lane.setDisallowed('26589743#3_2','bus')
+traci.lane.setDisallowed('26589743#3_3','bus')
+
 try:
     while step < 6000:
         step += 1
