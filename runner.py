@@ -51,7 +51,9 @@ traci.lane.setDisallowed('26589743#2_3','bus')
 traci.lane.setDisallowed('26589743#3_2','bus')
 traci.lane.setDisallowed('26589743#3_3','bus')
 
-listo=False
+parada_solicitada=[False,False,False,False,False,False]
+parada_aceptada=[False,False,False,False,False,False]
+ya_paro=[False,False,False,False,False,False]
 
 try:
     while step < 6000:
@@ -59,28 +61,48 @@ try:
         traci.simulationStep()
         print "STEP: ", step
 
+        parados_100=0
+
         for v in traci.vehicle.getIDList():
             cuadra=traci.vehicle.getRoadID(v)
             carril=traci.vehicle.getLaneIndex(v)
             tipo=traci.vehicle.getTypeID(v)
+            velocidad=traci.vehicle.getSpeed(v)
+            posicion=traci.vehicle.getLanePosition(v)
             linea=v.partition(".")[0]
             nro=int(v.partition(".")[2])
-            print linea+" "+str(nro)+" "+cuadra+" "+str(carril)+" "+tipo
-            if traci.vehicle.getLanePosition(v) > 40 and linea=="linea100" and nro==2 and not listo:
-               listo=True
-               traci.vehicle.setBusStop(v,'p1',5000)
-            
+
+            if nro <=5 and velocidad < 0.01 and posicion > 30 and not traci.vehicle.isAtBusStop(v):
+                if linea=="linea100":
+                    # aca iria un setStop
+                    #traci.vehicle.setStop(v,cuadra,posicion+0.1,carril,5000)
+                    parados_100=parados_100+1
+
             if traci.vehicle.isAtBusStop(v):
-                print "************************* En parada:"+v
-                #if linea=="linea100":
-                #    if nro>=ult100:
-                #      ult100=ult100+1
-                #      traci.vehicle.setBusStop(v,'p1',000)
+                if linea=="linea100":
+                    ya_paro[nro]=True
+                    parados_100=parados_100+1
+
                 if linea=="linea101":
                     if nro>=ult101:
                       ult101=ult101+1
                       traci.vehicle.setBusStop(v,'p2',000)
+
+            print linea+" "+str(nro)+" "+cuadra+" "+str(carril)+" "+tipo+" "+str(velocidad)
+            print "cant parados:"+str(parados_100)
             
+            if nro <= 5 and posicion > 30 and linea=="linea100" and parados_100 < 2:
+               if parados_100 < 1:
+                   try:
+                       if not parada_solicitada[nro]:
+                           parada_solicitada[nro]=True
+                           traci.vehicle.setBusStop(v,'p1',5000)
+                           # Si llega acá es porque va a parar
+                           parada_aceptada[nro]=True
+                   except:
+                       print linea+" "+str(nro)+" "+"no va a parar"
+               else:
+                   print "ya hay suficientes parados" 
 
 except traci.FatalTraCIError:
     print ""
