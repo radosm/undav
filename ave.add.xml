@@ -1,0 +1,8 @@
+<additional>
+    <busStop id="p1" lane="-9468#1_0" startPos="70" endPos="80"/>
+    <busStop id="p2" lane="-9460#0_0" startPos="70" endPos="80"/>
+    <vType id="bus_100" accel="2.6" decel="4.5" sigma="0" length="12" minGap="3" maxSpeed="70" color="1,1,0" guiShape="bus"/>
+    <vType id="bus_101" accel="2.6" decel="4.5" sigma="0" length="12" minGap="3" maxSpeed="70" color="255,0,0" guiShape="bus"/>
+    <!-- vType id="bus_100" accel="2.6" decel="4.5" sigma="0" length="12" minGap="3" maxSpeed="70" color="1,1,0" guiShape="bus" vClass="bus"/>
+    <vType id="bus_101" accel="2.6" decel="4.5" sigma="0" length="12" minGap="3" maxSpeed="70" color="255,0,0" guiShape="bus" vClass="bus"/ -->
+</additional>

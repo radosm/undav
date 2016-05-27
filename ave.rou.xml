@@ -1,0 +1,13 @@
+<flows>
+  <flow id="linea100" begin="0" end="7200" period="10" type="bus_100">
+    <route edges="-9468#0 -9468#1 -9468#2 -9468#3">
+      <!--stop busStop="p1" duration="0"/-->
+    </route>
+  </flow>
+
+  <flow id="linea101" begin="0" end="7200" period="15" type="bus_101">
+    <route edges="--9433 -9426 -9460#0 -9468#2 -9468#3">
+      <stop busStop="p2" duration="0"/>
+    </route>
+  </flow>
+</flows>
