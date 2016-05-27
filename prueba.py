@@ -39,6 +39,8 @@ traci.init(PORT)
 ult100=0
 ult101=0
 
+belgrano="-9468"
+
 traci.lane.setDisallowed('-304664096_0','bus')
 
 # Primera cuadra de Belgrano
