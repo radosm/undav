@@ -9,6 +9,7 @@ Prueba de ruteo y detencion
 """
 import os, sys, subprocess
 from time import sleep
+import scipy.stats as stats
 
 PORT = 8813
 step = 0
@@ -36,9 +37,6 @@ import traci.constants as tc
 
 traci.init(PORT)
 
-ult100=0
-ult101=0
-
 belgrano="-9468"
 
 traci.lane.setDisallowed('-304664096_0','bus')
@@ -53,58 +51,26 @@ traci.lane.setDisallowed('26589743#2_3','bus')
 traci.lane.setDisallowed('26589743#3_2','bus')
 traci.lane.setDisallowed('26589743#3_3','bus')
 
-parada_solicitada=[False,False,False,False,False,False]
-parada_aceptada=[False,False,False,False,False,False]
-ya_paro=[False,False,False,False,False,False]
-
+siguiente=1
 try:
     while step < 6000:
         step += 1
-        traci.simulationStep()
-        print "STEP: ", step
-
-        parados_100=0
+        if step==siguiente:
+            nuevoID="100."+str(step)
+            traci.vehicle.add(vehID=nuevoID, routeID="linea100", typeID="bus_100")
+            # el 2000 en realidad debe salir de una v.a.
+            traci.vehicle.setBusStop(vehID=nuevoID, stopID="p1", duration=2000)
+            # es * 600 porque el step_length es 0.1s // 2.72 es el lambda calculado
+            siguiente=int(stats.expon.rvs(scale=1/2.72)*600)+step
+            print siguiente
 
         for v in traci.vehicle.getIDList():
-            cuadra=traci.vehicle.getRoadID(v)
-            carril=traci.vehicle.getLaneIndex(v)
-            tipo=traci.vehicle.getTypeID(v)
-            velocidad=traci.vehicle.getSpeed(v)
-            posicion=traci.vehicle.getLanePosition(v)
-            linea=v.partition(".")[0]
-            nro=int(v.partition(".")[2])
-
-            if nro <=5 and velocidad < 0.01 and posicion > 30 and not traci.vehicle.isAtBusStop(v):
-                if linea=="linea100":
-                    # aca iria un setStop
-                    #traci.vehicle.setStop(v,cuadra,posicion+0.1,carril,5000)
-                    parados_100=parados_100+1
-
             if traci.vehicle.isAtBusStop(v):
-                if linea=="linea100":
-                    ya_paro[nro]=True
-                    parados_100=parados_100+1
+                print v," esta en la parada"
 
-                if linea=="linea101":
-                    if nro>=ult101:
-                      ult101=ult101+1
-                      traci.vehicle.setBusStop(v,'p2',000)
+        traci.simulationStep()
+        print "STEP: ", step, " SIGUIENTE: ", siguiente
 
-            print linea+" "+str(nro)+" "+cuadra+" "+str(carril)+" "+tipo+" "+str(velocidad)
-            print "cant parados:"+str(parados_100)
-            
-            if nro <= 5 and posicion > 30 and linea=="linea100" and parados_100 < 2:
-               if parados_100 < 1:
-                   try:
-                       if not parada_solicitada[nro]:
-                           parada_solicitada[nro]=True
-                           traci.vehicle.setBusStop(v,'p1',5000)
-                           # Si llega acá es porque va a parar
-                           parada_aceptada[nro]=True
-                   except:
-                       print linea+" "+str(nro)+" "+"no va a parar"
-               else:
-                   print "ya hay suficientes parados" 
 
 except traci.FatalTraCIError:
     print ""
