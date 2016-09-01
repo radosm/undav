@@ -1,6 +1,7 @@
-#
-# Formatea los csv para ser interpretados luego por el programa que calcula los lambda y mu
-#
+# ==============================================================================
+# Formatea los csv para ser interpretados luego por la segunda fase del formateo
+# ==============================================================================
+
 ls *.csv | while read a
 do
   awk '

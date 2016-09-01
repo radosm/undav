@@ -1,3 +1,8 @@
+# ================================================
+# Genera el archivo en el formato definitivo 
+# que luego se usará para calcular los lambda y mu
+# ================================================
+
 ./formatea1 | awk -F, '
 {
   if ($1=="PARADA") {parada=$2;arribo=1}
