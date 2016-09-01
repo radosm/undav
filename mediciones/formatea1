@@ -3,11 +3,6 @@
 #
 ls *.csv | while read a
 do
-  ##echo
-  ##echo "--------"
-  ##echo "Archivo="$a
-  ##echo "--------"
-  ##echo
   awk '
   BEGIN {
     FPAT = "([^,]*)|(\"[^\"]*\")" # Formato de los campos en el CSV
@@ -41,20 +36,15 @@ do
       }
       break
     case /Línea/:
-      $1="LINEA";p=1
-      break
+      $1="LINEA";p=1;break
     case /Tiempo/:
-      $1="TDET";p=1
-      break
+      $1="TDET";p=1;break
     case /Suben/:
-      $1="SUBEN";p=1
-      break
+      $1="SUBEN";p=1;break
     case /Bajan/:
-      $1="BAJAN";p=1
-      break
+      $1="BAJAN";p=1;break
     case /# Personas/:
-      $1="CPERS";p=1
-      break
+      $1="CPERS";p=1;break
   } 
 
   if (p==1) { # Interesa imprimir esta línea
@@ -64,5 +54,5 @@ do
     }
   }
   
-  }' "$a" | grep -v Lugar
+  }' "$a"
 done
