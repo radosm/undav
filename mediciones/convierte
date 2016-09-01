@@ -1,0 +1,7 @@
+#
+# Convierte las planillas excel a csv en utf-8
+#
+ls *.xlsx | while read a
+do
+  libreoffice --headless --convert-to csv:"Text - txt - csv (StarCalc)":"44,34,0,1,,0" $a
+done

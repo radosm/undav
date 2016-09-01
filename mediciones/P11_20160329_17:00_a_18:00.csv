@@ -1,0 +1,36 @@
+"Lugar, día, rango horario:",29/03/2016 17:00 a 18:00   -   Parada del 10 - 17 - 22 - 24 - 33 - 154,,,,,,,,
+Línea,22,10,22,10,33,17,17,154,24
+Hora,17:00,17:01,17:02,17:03,17:11,17:12,17:13,17:15,17:11
+Tiempo Detenido (segundos),20,20,25,30,No,10,50,45,55
+Suben,10,5,8,3,Paró,0,11,12,16
+Bajan,2,3,5,4,,1,0,4,3
+Vacio,,,,,,,,,
+"No vacío, asientos libres",,,,,,,,,
+"No completo, sin asientos",X,X,X,X,,X,X,X,X
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),25,20,25,18,,34,30,34,34
+,,,,,,,,,
+Línea,17,17,24,22,24,33,17,17,154
+Hora,17:16,17:17,17:18,17:21,17:22,17:24,17:28,17:30,17:35
+Tiempo Detenido (segundos),40,45,40,35,40,30,25,30,35
+Suben,13,10,10,8,7,9,5,6,7
+Bajan,0,0,0,1,2,3,1,2,0
+Vacio,,,,,,,,,
+"No vacío, asientos libres",,,,,,X,X,,
+"No completo, sin asientos",X,X,X,X,X,,,X,X
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),28,28,22,21,23,20,24,19,26
+,,,,,,,,,
+Línea,22,24,10,17,,,,,
+Hora,17:40,17:46,17:51,17:56,,,,,
+Tiempo Detenido (segundos),45,30,20,25,,,,,
+Suben,10,4,3,4,,,,,
+Bajan,3,1,2,0,,,,,
+Vacio,,,,,,,,,
+"No vacío, asientos libres",,X,X,X,,,,,
+"No completo, sin asientos",X,,,,,,,,
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),18,15,13,10,,,,,
