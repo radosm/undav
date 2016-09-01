@@ -1,0 +1,5 @@
+if [ "$1" ]; then
+  cat mediciones.txt |sort -t, -k4,4n -k1,1n | awk -F, -v linea=$1 '{if ($4==linea) {print $1;exit}}'
+else
+  cat mediciones.txt |sort -t, -k4,4n -k1,1n | awk -F, 'BEGIN {ant=-1}{if ($4!=ant) {print $4","$1;ant=$4}}'
+fi
