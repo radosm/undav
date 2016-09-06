@@ -21,7 +21,7 @@ Vacio,,,,,,,,,
 "No completo, sin asientos",,,,x,x,x,,,
 Completo,,,,,,,,,
 Tan completo que no se detiene,,,,,,,,,
-# Personas en la parada: (N°/C /NC),12,14,10,13,36,41,más de 40,20,30
+# Personas en la parada: (N°/C /NC),12,14,10,13,36,41,45,20,30
 ,,,,,,,,,
 Línea,271,95,271,446,570,271,373,95,570
 Hora,17:12,17:15,17:16,17:17,17:18,17:19,17:21,17:23,17:25
@@ -33,7 +33,7 @@ Vacio,,,,,,,,,
 "No completo, sin asientos",,x,x,,,,,,
 Completo,,,,,,,,,
 Tan completo que no se detiene,,,,,,,,,
-# Personas en la parada: (N°/C /NC),30,más de 40,más de 40,más de 30,más de 30,más de 30,21,25,34
+# Personas en la parada: (N°/C /NC),30,45,45,35,35,35,21,25,34
 ,,,,,,,,,
 Línea,373,100,271,134,178,373,95,570,271
 Hora,17:25,17:30,17:31,17:32,17:32,17:33,17:34,17:36,17:37
@@ -45,7 +45,7 @@ Vacio,,,,,,,,,
 "No completo, sin asientos",,x,x,x,x,,x,,
 Completo,,,,,,,,,
 Tan completo que no se detiene,,,,,,,,,
-# Personas en la parada: (N°/C /NC),35,más de 40,más de 40,más de 40,más de 40,más de 40,más de 40,más de 40,más de 40
+# Personas en la parada: (N°/C /NC),35,45,45,45,45,45,45,45,45
 ,,,,,,,,,
 Línea,178,178,271,95,178,100,100,271,373
 Hora,17:38,17:38,17:39,17:40,17:41,17:41,17:42,17:43,17:45

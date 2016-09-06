@@ -10,22 +10,18 @@ if [ ! "$linea" -o ! "$parada" ]; then
   exit 1
 fi
 
-cat mediciones.txt | awk -F, -v parada=$parada -v linea=$linea '{
+./selecciona mediciones.txt -parada $parada -linea $linea | awk -F, '{
 
-# Inicialización de variables
-# ---------------------------
-if (NR==1) {ant=$3;dif=0;cant=0}
+  if (NR==1) {
+    # Inicialización de variables
+    # ---------------------------
+    ant=$3;dif=0;cant=0
+  }
 
-# Filtra sólo las entradas que interesan
-# --------------------------------------
-if ($1==parada && $4==linea) {
-
-# Al llegar acá tengo las mediciones de la primer parada donde para la linea
-# --------------------------------------------------------------------------
   print $0 #debug
   cant++
   hora=$5
   dif+=hora-ant
   ant=hora
-}
-} END { print "lambda_"linea"="(cant/dif)" segundos." }'
+} 
+END { print "lambda_"linea"="(cant/dif)" segundos." }'

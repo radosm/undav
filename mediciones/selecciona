@@ -1,0 +1,40 @@
+print_help(){
+  echo parametros incorrectos
+}
+
+if [ $# -eq 0 ]; then
+  print_help>&2; exit 1
+fi
+
+archivo=$1; shift
+
+if [ $archivo = "-" ]; then
+  archivo=""  # stdin
+else 
+  if [ ! -f $archivo ]; then
+    echo "archivo no existe">&2; exit 1
+  fi
+fi
+
+while [ $# -ne 0 ]; do
+P=$1
+
+case $P in
+  -linea)   shift;LINEA=$1
+          ;;
+  -parada)  shift;PARADA=$1
+          ;;
+  *)      print_help >&2;exit 1
+          ;;
+esac
+
+shift
+
+done
+
+awk -F, -v linea=$LINEA -v parada=$PARADA '{
+  p=1
+  if (parada!="" && $1!=parada) p=0;
+  if (linea!="" && $4!=linea) p=0;
+  if (p!=0) print
+}' $archivo

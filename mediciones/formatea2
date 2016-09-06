@@ -3,7 +3,7 @@
 # que luego se usará para calcular los lambda y mu
 # ================================================
 
-./formatea1 | awk -F, '
+awk -F, '
 {
   if ($1=="PARADA") {parada=$2;arribo=1}
   if ($1=="FECHA") fecha=$2

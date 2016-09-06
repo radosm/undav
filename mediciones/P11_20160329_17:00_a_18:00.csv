@@ -1,9 +1,9 @@
 "Lugar, día, rango horario:",29/03/2016 17:00 a 18:00   -   Parada del 10 - 17 - 22 - 24 - 33 - 154,,,,,,,,
 Línea,22,10,22,10,33,17,17,154,24
 Hora,17:00,17:01,17:02,17:03,17:11,17:12,17:13,17:15,17:11
-Tiempo Detenido (segundos),20,20,25,30,No,10,50,45,55
-Suben,10,5,8,3,Paró,0,11,12,16
-Bajan,2,3,5,4,,1,0,4,3
+Tiempo Detenido (segundos),20,20,25,30,0,10,50,45,55
+Suben,10,5,8,3,0,0,11,12,16
+Bajan,2,3,5,4,0,1,0,4,3
 Vacio,,,,,,,,,
 "No vacío, asientos libres",,,,,,,,,
 "No completo, sin asientos",X,X,X,X,,X,X,X,X

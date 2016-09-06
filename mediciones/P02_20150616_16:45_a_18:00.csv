@@ -21,11 +21,11 @@ Vacio,x,,,,,,,,
 "No completo, sin asientos",,x,x,x,x,x,x,x,x
 Completo,,,,,,,,,
 Tan completo que no se detiene,,,,,,,,,
-# Personas en la parada: (N°/C /NC),30,más de 50,más de 60,más de 60,más de 60,más de 60,más de 60,más de 60,más de 50
+# Personas en la parada: (N°/C /NC),30,55,65,65,65,65,65,65,55
 ,,,,,,,,,
 Línea,295,95,100,446,295,95,134,134,295
 Hora,17:26,17:27,17:29,17:30,17:31,17:32,17:33,17:34,17:35
-Tiempo Detenido (segundos),140,40,60,40,40,40,40,40,
+Tiempo Detenido (segundos),140,40,60,40,40,40,40,40,40
 Suben,40,10,10,10,15,10,10,15,20
 Bajan,5,3,0,2,0,7,3,2,2
 Vacio,,,,,,,,,
@@ -33,7 +33,7 @@ Vacio,,,,,,,,,
 "No completo, sin asientos",x,x,,,,,,,
 Completo,,,,,,,,,
 Tan completo que no se detiene,,,,,,,,,
-# Personas en la parada: (N°/C /NC),más de 60,más de 60,más de 40,más de 40,más de 30,más de 30,25,24,7
+# Personas en la parada: (N°/C /NC),65,65,45,45,35,35,25,24,7
 ,,,,,,,,,
 Línea,95,446,134,95,100,134,134,100,95
 Hora,17:35,17:36,17:36,17:38,17:40,17:41,17:41,17:42,17:44
@@ -49,7 +49,7 @@ Tan completo que no se detiene,,,,,,,,,
 ,,,,,,,,,
 Línea,295,295,446,100,95,95,95,100,95
 Hora,17:45,17:45,17:49,17:53,17:54,17:54,17:56,17:58,17:59
-Tiempo Detenido (segundos),60,30,30,30,30,30,30,,
+Tiempo Detenido (segundos),60,30,30,30,30,30,30,30,30
 Suben,20,5,8,10,5,5,2,12,13
 Bajan,2,0,0,10,2,9,12,4,3
 Vacio,,,,,,,,,
