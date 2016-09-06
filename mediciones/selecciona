@@ -1,5 +1,14 @@
+# -----------------------------------------------------------
+# selecciona mediciones de una linea y/o parada en particular
+# -----------------------------------------------------------
+
+N=$(basename $0)
+
 print_help(){
-  echo parametros incorrectos
+  echo
+  echo "Uso: $N archivo|- [-linea l] [-parada p]"
+  echo "     Si archivo es - toma el stdin"
+  echo
 }
 
 if [ $# -eq 0 ]; then
@@ -17,19 +26,16 @@ else
 fi
 
 while [ $# -ne 0 ]; do
-P=$1
-
-case $P in
-  -linea)   shift;LINEA=$1
-          ;;
-  -parada)  shift;PARADA=$1
-          ;;
-  *)      print_help >&2;exit 1
-          ;;
-esac
-
-shift
-
+  P=$1
+  case $P in
+    -linea)  shift;LINEA=$1
+             ;;
+    -parada) shift;PARADA=$1
+             ;;
+    *)       print_help >&2;exit 1
+             ;;
+  esac
+  shift
 done
 
 awk -F, -v linea=$LINEA -v parada=$PARADA '{

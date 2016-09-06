@@ -1,0 +1,57 @@
+# =====================================================
+# Calcula el lambda de llegada de personas a una parada
+# =====================================================
+
+parada=$1
+
+if [ ! "$parada" ]; then
+  echo "error, indicar parada">&2
+  exit 1
+fi
+
+./selecciona mediciones.txt -parada $parada | awk -F, '{
+
+  hora=$5
+  suben=$7
+  cpers=$9
+
+  if (NR==1) {
+    # Inicialización de variables
+    # ---------------------------
+    ant_hora=hora;cant_suben=0;cant_quedan=cpers
+  } 
+
+  if (hora==ant_hora) { # Junto mediciones de la misma hora
+    cant_suben+=suben
+    if (cpers<cant_quedan) cant_quedan=cpers
+  } else {
+    print ant_hora","cant_suben","cant_quedan
+    ant_hora=hora
+    cant_suben=suben
+    cant_quedan=cpers
+  }
+} 
+END {
+  print ant_hora","cant_suben","cant_quedan
+}' | awk -F, -v parada=$parada '{
+  hora=$1
+  suben=$2
+  cpers=$3
+  if (NR==1) {
+    ant_hora=hora
+    ant_suben=suben
+    ant_cpers=cpers
+    lambda=0
+    cant=0
+  } else {
+    dif_hora=hora-ant_hora
+    llegaron=cpers+suben-ant_cpers
+    lambda+=llegaron/dif_hora
+    cant++
+    ant_hora=hora
+    ant_suben=suben
+    ant_cpers=cpers
+  }  
+} END {
+  print "lambda_parada_"parada"="(lambda/cant)" (en segundos)."
+}'
