@@ -3,3 +3,6 @@
 # ================================
 
 ./formatea1 | ./formatea2 > mediciones.txt
+
+cut -d, -f1 mediciones.txt |sort -un > paradas.txt
+cut -d, -f4 mediciones.txt |sort -un > lineas.txt

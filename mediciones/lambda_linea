@@ -24,4 +24,4 @@ fi
   dif+=hora-ant
   ant=hora
 } 
-END { print "lambda_linea_"linea"="(cant/dif)" (en segundos)." }'
+END { print "lambda_linea_"linea"="(dif/cant)" (en segundos)." }'

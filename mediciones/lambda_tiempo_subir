@@ -1,0 +1,20 @@
+# ===================================================
+# Calcula el lambda de tiempo en que sube una persona
+# ===================================================
+
+./selecciona mediciones.txt | awk -F, '{
+
+  if (NR==1) {
+    # Inicialización de variables
+    # ---------------------------
+    tiempo_subir=0;cant=0
+  }
+
+  tdet=$6
+  suben=$7
+  if (suben>0) {
+    cant++
+    tiempo_subir+=(tdet/suben)
+  }
+} 
+END { print "lambda_tiempo_subir="(tiempo_subir/cant)" (en segundos)." }'

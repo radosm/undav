@@ -1,0 +1,9 @@
+SALIDA=lambdas_paradas.txt
+
+>$SALIDA
+
+cat paradas.txt | while read p
+do
+  l=$(./lambda_parada $p) 
+  echo $p","$l >> $SALIDA
+done
