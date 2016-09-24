@@ -1,0 +1,5 @@
+cat lineas.txt | while read li
+do
+  pp=$(./primerparada $li) 
+  echo $li","$pp
+done

@@ -1,0 +1,5 @@
+cat paradas_lineas.txt | awk -F, '{print $1,$2}'| while read pa li
+do
+  la=$(./lambda_parada_linea $pa $li) 
+  echo $pa","$li","$la
+done

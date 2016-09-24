@@ -17,4 +17,5 @@
     tiempo_subir+=(tdet/suben)
   }
 } 
-END { print "lambda_tiempo_subir="(tiempo_subir/cant)" (en segundos)." }'
+END { print tiempo_subir/cant }'
+#END { print "lambda_tiempo_subir="(tiempo_subir/cant)" (en segundos)." }'

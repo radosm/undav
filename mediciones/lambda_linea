@@ -18,10 +18,11 @@ fi
     ant=$3;dif=0;cant=0
   }
 
-  print $0 #debug
+  ##print $0 #debug
   cant++
   hora=$5
   dif+=hora-ant
   ant=hora
 } 
-END { print "lambda_linea_"linea"="(dif/cant)" (en segundos)." }'
+END { print (dif/cant) }'
+#END { print "lambda_linea_"linea"="(dif/cant)" (en segundos)." }'

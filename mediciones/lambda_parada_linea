@@ -52,5 +52,10 @@ END {
     ant_suben=suben
   }  
 } END {
-  print "mu_parada_"parada"_linea_"linea"="(mu/cant)"."
+  #print "lambda_parada_"parada"_linea_"linea"="(mu/cant)"."
+  if (cant!=0) {
+    print (mu/cant)
+  } else {
+    print 0
+  }
 }'
