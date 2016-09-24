@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import os, sys, subprocess
+import os, sys, subprocess, math
 from time import sleep
 import scipy.stats as stats
 
@@ -83,6 +83,24 @@ for l in s.stdout:
   PRIMER_PARADA[l]=p
 
 #
+# Lee valores para la distribución normal que se usará para calcular la cantidad
+# inicial de personas en cada parada
+#
+MU={}
+S2={}
+MAX={}
+s=subprocess.Popen( ['bash','./calcula_s2'],stdout=subprocess.PIPE)
+for l in s.stdout:
+  s=l.split(',')
+  p=int(s[0])    # parada
+  mu=float(s[1]) # mu
+  s2=float(s[2]) # s^2
+  mx=int(s[3])   # cantidad máxima de personas observada
+  MU[p]=mu
+  S2[p]=s2
+  MAX[p]=mx
+
+#
 # Calcula array AP
 #
 AP={}
@@ -108,7 +126,13 @@ DELTAP=[]
 PROXIMO={}
 
 for p in PARADAS:
-  PP[p]=0
+  PP[p]=int(round(stats.norm.rvs()*math.sqrt(S2[p])+MU[p],0))
+  if PP[p] < 0:
+    PP[p]=0
+  if PP[p] > MAX[p]:
+    PP[p]=MAX[p]
+
+print PP
 
 for l in LINEAS:
     va=stats.expon.rvs(scale=LAMBDAS_LINEAS[l])

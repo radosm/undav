@@ -1,0 +1,29 @@
+cut -d, -f1,9 mediciones.txt | awk -F, '
+BEGIN {n=0;suma=0;suma2=0;max=0}
+{
+  parada=$1
+  gente=$2
+  if (NR==1) pant=parada;
+
+  if (parada!=pant) {
+    mu=suma/n
+    s2=(n/(n-1))*(suma2/n-mu)
+    print pant","mu","s2","max
+    pant=parada
+    n=0
+    suma=0
+    suma2=0
+    max=0
+  }
+  n++
+  suma+=gente
+  suma2+=gente^2
+  if (gente>max) {
+    max=gente
+  }
+}
+END {
+  mu=suma/n
+  s2=(n/(n-1))*(suma2/n-mu)
+  print pant","mu","s2","max
+}'
