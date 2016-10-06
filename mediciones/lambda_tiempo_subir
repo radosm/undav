@@ -2,6 +2,8 @@
 # Calcula el lambda de tiempo en que sube una persona
 # ===================================================
 
+cd $(dirname $0)
+
 ./selecciona mediciones.txt | awk -F, '{
 
   if (NR==1) {

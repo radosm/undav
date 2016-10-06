@@ -7,7 +7,7 @@
 
   <flow id="linea101" begin="0" end="7200" period="15" type="bus_101">
     <route edges="--9433 -9426 -9460#0 -9468#2 -9468#3">
-      <stop busStop="p2" duration="0"/>
+      <stop busStop="p02" duration="0"/>
     </route>
   </flow>
 </flows>

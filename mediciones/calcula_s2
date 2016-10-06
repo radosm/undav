@@ -1,3 +1,4 @@
+cd $(dirname $0)
 cut -d, -f1,9 mediciones.txt | awk -F, '
 BEGIN {n=0;suma=0;suma2=0;max=0}
 {

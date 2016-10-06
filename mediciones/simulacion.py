@@ -8,7 +8,7 @@ import scipy.stats as stats
 #
 # Tiempo de simulacion (en segundos)
 #
-TS=50
+TS=7200
 
 #
 # Lee cuáles son las paradas existentes
@@ -83,8 +83,8 @@ for l in s.stdout:
   PRIMER_PARADA[l]=p
 
 #
-# Lee valores para la distribución normal que se usará para calcular la cantidad
-# inicial de personas en cada parada
+# Lee valores para la distribución normal que se usará para
+# calcular la cantidad inicial de personas en cada parada
 #
 MU={}
 S2={}
@@ -132,8 +132,6 @@ for p in PARADAS:
   if PP[p] > MAX[p]:
     PP[p]=MAX[p]
 
-print PP
-
 for l in LINEAS:
     va=stats.expon.rvs(scale=LAMBDAS_LINEAS[l])
     PROXIMO[l]=int(va)
@@ -142,7 +140,8 @@ for seg in range (1,TS):
   for p in PARADAS:
     PP[p]+=AP[p,seg]
   
-  # ve si hay que inyectar un nuevo colectivo
+  # Ve si hay que inyectar un nuevo colectivo
+  # -----------------------------------------
   for l in LINEAS:
 
     # Partida de un colectivo
@@ -159,32 +158,32 @@ for seg in range (1,TS):
         DELTA.append(seg-TANT[l])
         TANT[l]=seg
 
-    # Llegada de colectivos a parada
-    # ------------------------------
-    if True==True:
-      p=1  # OJO, acá hay que ver a qué parada llegó el colectivo
-      l=17 # OJO, acá hay que ver a qué linea corresponde el colectivo
+  # Llegada de colectivos a parada
+  # ------------------------------
+  if True==True:
+    p=1  # OJO, acá hay que ver a qué parada llegó el colectivo
+    l=17 # OJO, acá hay que ver a qué linea corresponde el colectivo
 
-      if (p,l) not in TULT: # Es la primer llegada de la linea a la parada
-        TULT[p,l]=0
+    if (p,l) not in TULT: # Es la primer llegada de la linea a la parada
+      TULT[p,l]=0
 
-      # tt significa tiempo transcurrido
-      tt=seg-TULT[p,l]
+    # tt significa tiempo transcurrido
+    tt=seg-TULT[p,l]
 
-      suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
-      tdet=round(stats.expon.rvs(scale=LAMBDA_TIEMPO_SUBIR*tt),0)
+    suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
+    tdet=round(stats.expon.rvs(scale=LAMBDA_TIEMPO_SUBIR*tt),0)
 
-      # Cálculos para determinar factor de contracción
-      if p==PRIMER_PARADA[l]:
-        if l not in TPANT:
-          TPANT[l]=seg
-        else:
-          DELTAP.append(seg-TPANT[l])
-          TPANT[l]=seg
-
-      # Establecer detención
-
-      if PP[p] < suben:
-        PP[p]=0
+    # Cálculos para determinar factor de contracción
+    if p==PRIMER_PARADA[l]:
+      if l not in TPANT:
+        TPANT[l]=seg
       else:
-        PP[p]-=suben
+        DELTAP.append(seg-TPANT[l])
+        TPANT[l]=seg
+
+    # Establecer detención
+
+    if PP[p] < suben:
+      PP[p]=0
+    else:
+      PP[p]-=suben

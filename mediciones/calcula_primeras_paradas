@@ -1,3 +1,4 @@
+cd $(dirname $0)
 cat lineas.txt | while read li
 do
   pp=$(./primerparada $li) 
