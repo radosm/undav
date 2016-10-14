@@ -1,13 +1,113 @@
-<flows>
-  <flow id="linea100" begin="0" end="7200" period="10" type="bus_100">
-    <route edges="-9468#0 -9468#1 -9468#2 -9468#3">
-      <!--stop busStop="p1" duration="0"/-->
-    </route>
-  </flow>
+<routes>
+  <route id="linea_17" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p01" duration="0"/>
+      <stop busStop="p08" duration="0"/>
+      <stop busStop="p11" duration="0"/>
+  </route>
 
-  <flow id="linea101" begin="0" end="7200" period="15" type="bus_101">
-    <route edges="--9433 -9426 -9460#0 -9468#2 -9468#3">
+  <route id="linea_10" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p01" duration="0"/>
+      <stop busStop="p08" duration="0"/>
+      <stop busStop="p10" duration="0"/>
+      <stop busStop="p11" duration="0"/>
+  </route>
+
+  <route id="linea_22" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p01" duration="0"/>
+      <stop busStop="p08" duration="0"/>
+      <stop busStop="p11" duration="0"/>
+  </route>
+
+  <route id="linea_95" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
       <stop busStop="p02" duration="0"/>
-    </route>
-  </flow>
-</flows>
+      <stop busStop="p07" duration="0"/>
+      <stop busStop="p09" duration="0"/>
+  </route>
+
+  <route id="linea_100" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p02" duration="0"/>
+      <stop busStop="p07" duration="0"/>
+      <stop busStop="p09" duration="0"/>
+  </route>
+
+  <route id="linea_134" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p02" duration="0"/>
+      <stop busStop="p07" duration="0"/>
+  </route>
+
+  <route id="linea_446" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p02" duration="0"/>
+      <stop busStop="p07" duration="0"/>
+  </route>
+
+  <route id="linea_24" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p03" duration="0"/>
+      <stop busStop="p11" duration="0"/>
+  </route>
+
+  <route id="linea_74" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p03" duration="0"/>
+      <stop busStop="p09" duration="0"/>
+  </route>
+
+  <route id="linea_98" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p03" duration="0"/>
+      <stop busStop="p10" duration="0"/>
+  </route>
+
+  <route id="linea_148" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p03" duration="0"/>
+      <stop busStop="p12" duration="0"/>
+  </route>
+
+  <route id="linea_33" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p04" duration="0"/>
+      <stop busStop="p11" duration="0"/>
+  </route>
+
+  <route id="linea_45" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p04" duration="0"/>
+      <stop busStop="p11" duration="0"/>
+  </route>
+
+  <route id="linea_129" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p04" duration="0"/>
+  </route>
+
+  <route id="linea_154" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p04" duration="0"/>
+      <stop busStop="p07" duration="0"/>
+  </route>
+
+  <route id="linea_293" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p05" duration="0"/>
+      <stop busStop="p12" duration="0"/>
+  </route>
+
+  <route id="linea_247" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p06" duration="0"/>
+      <stop busStop="p12" duration="0"/>
+  </route>
+
+  <route id="linea_178" edges="-9441#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p07" duration="0"/>
+      <stop busStop="p12" duration="0"/>
+  </route>
+
+  <route id="linea_271" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p07" duration="0"/>
+  </route>
+
+  <route id="linea_373" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p07" duration="0"/>
+  </route>
+
+  <route id="linea_295" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p09" duration="0"/>
+  </route>
+
+  <route id="linea_570" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p12" duration="0"/>
+  </route>
+
+</routes>
