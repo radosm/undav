@@ -1,4 +1,5 @@
 <routes>
+
   <route id="linea_17" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
       <stop busStop="p01" duration="0"/>
       <stop busStop="p08" duration="0"/>
@@ -37,6 +38,7 @@
   <route id="linea_446" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
       <stop busStop="p02" duration="0"/>
       <stop busStop="p07" duration="0"/>
+      <stop busStop="p09" duration="0"/>
   </route>
 
   <route id="linea_24" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
@@ -61,12 +63,12 @@
 
   <route id="linea_33" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
       <stop busStop="p04" duration="0"/>
+      <stop busStop="p09" duration="0"/>
       <stop busStop="p11" duration="0"/>
   </route>
 
   <route id="linea_45" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
       <stop busStop="p04" duration="0"/>
-      <stop busStop="p11" duration="0"/>
   </route>
 
   <route id="linea_129" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
@@ -76,6 +78,7 @@
   <route id="linea_154" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
       <stop busStop="p04" duration="0"/>
       <stop busStop="p07" duration="0"/>
+      <stop busStop="p11" duration="0"/>
   </route>
 
   <route id="linea_293" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
@@ -95,6 +98,7 @@
 
   <route id="linea_271" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
       <stop busStop="p07" duration="0"/>
+      <stop busStop="p12" duration="0"/>
   </route>
 
   <route id="linea_373" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
@@ -102,16 +106,17 @@
   </route>
 
   <route id="linea_295" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
+      <stop busStop="p02" duration="0"/>
+      <stop busStop="p05" duration="0"/>
       <stop busStop="p09" duration="0"/>
   </route>
 
-  <!-- OJO CON LA 520 -->
   <route id="linea_520" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6"> 
       <stop busStop="p12" duration="0"/>
   </route>
 
   <route id="linea_570" edges="-9468#0 -9468#1 -9468#2 -9468#3 -9468#4 -9468#5 -9468#6">
-      <stop busStop="p08" duration="0"/>
+      <stop busStop="p07" duration="0"/>
       <stop busStop="p12" duration="0"/>
   </route>
 

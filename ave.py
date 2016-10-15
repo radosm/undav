@@ -100,9 +100,6 @@ for l in f:
   PARADAS_LINEA[li].append(p)
 f.close()
 
-print PARADAS_LINEA
-
-
 #
 # Lee para cada parada cuál es el lambda de arribo de personas
 #
@@ -198,6 +195,7 @@ TPULT={}
 DELTAP=[]
 PROXIMO={}
 PARO_VECES={}
+PARO_ULTIMA={}
 
 for p in PARADAS:
   PP[p]=int(round(stats.norm.rvs()*math.sqrt(S2[p])+MU[p],0))
@@ -233,6 +231,7 @@ try:
         vid=str(l)+"."+str(seg)
         rid="linea_"+str(l)
         PARO_VECES[vid]=0
+        PARO_ULTIMA[vid]=""
         if l!=178:
           traci.vehicle.add(vehID=vid, routeID=rid, typeID="bus_100")
         # 2) calcula el próximo
@@ -249,37 +248,41 @@ try:
     # ------------------------------
     for v in traci.vehicle.getIDList():
       if traci.vehicle.isAtBusStop(v):
-        PARO_VECES[v]=PARO_VECES[v]+1
-        #linea=v.partition(".")[0]
-        print "seg="+str(seg)+" vehiculo "+v+" en su parada nro "+str(PARO_VECES[v])
-        p=1  # OJO, acá hay que ver a qué parada llegó el colectivo
-        l=17 # OJO, acá hay que ver a qué linea corresponde el colectivo
-    
-        if (p,l) not in TULT: # Es la primer llegada de la linea a la parada
-          TULT[p,l]=0
-    
-        # tt significa tiempo transcurrido
-        tt=seg-TULT[p,l]
-    
-        suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
-        tdet=round(stats.expon.rvs(scale=LAMBDA_TIEMPO_SUBIR*tt),0)
-    
-        # Cálculos para determinar factor de contracción
-        if p==PRIMER_PARADA[l]:
-          if l not in TPANT:
-            TPANT[l]=seg
+        l=int(v.partition(".")[0])
+        p=PARADAS_LINEA[l][PARO_VECES[v]]
+        #print PARO_ULTIMA[v]+" - "+traci.vehicle.getRoadID(v)
+        if PARO_ULTIMA[v]!=traci.vehicle.getRoadID(v):
+          PARO_ULTIMA[v]=traci.vehicle.getRoadID(v)
+          PARO_VECES[v]=PARO_VECES[v]+1
+          ps="p%02d" % p
+      
+          if (p,l) not in TULT: # Es la primer llegada de la linea a la parada
+            TULT[p,l]=0
+      
+          # tt significa tiempo transcurrido
+          tt=seg-TULT[p,l]
+      
+          suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
+          tdet=round(stats.expon.rvs(scale=LAMBDA_TIEMPO_SUBIR*suben),0)
+
+          print "seg="+str(seg)+" vehiculo "+v+" en su parada nro "+str(PARO_VECES[v])+", la parada es la "+ps+" tdet="+str(tdet)+" suben="+str(suben)
+      
+          # Cálculos para determinar factor de contracción
+          if p==PRIMER_PARADA[l]:
+            if l not in TPANT:
+              TPANT[l]=seg
+            else:
+              DELTAP.append(seg-TPANT[l])
+              TPANT[l]=seg
+      
+          # Establecer detención
+          traci.vehicle.setBusStop(v,ps,tdet*1000)
+      
+          if PP[p] < suben:
+            PP[p]=0
           else:
-            DELTAP.append(seg-TPANT[l])
-            TPANT[l]=seg
-    
-        # Establecer detención
-        # traci.vehicle.setBusStop(v,tdet*1000)
-  
-    
-        if PP[p] < suben:
-          PP[p]=0
-        else:
-          PP[p]-=suben
+            PP[p]-=suben
+
 except traci.FatalTraCIError:
     print ""
 
