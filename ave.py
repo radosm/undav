@@ -81,11 +81,27 @@ f.close()
 # Lee cuáles son las líneas existentes
 #
 LINEAS=[]
+PARADAS_LINEA={}
 f=open("mediciones/lineas.txt","r")
 for l in f:
   li=int(l)
   LINEAS.append(li)
+  PARADAS_LINEA[li]=[]
 f.close()
+
+#
+# Lee cuáles son las paradas de cada linea
+#
+f=open("mediciones/paradas_lineas.txt","r")
+for l in f:
+  s=l.split(',')
+  p=int(s[0])   # parada
+  li=int(s[1])  # linea
+  PARADAS_LINEA[li].append(p)
+f.close()
+
+print PARADAS_LINEA
+
 
 #
 # Lee para cada parada cuál es el lambda de arribo de personas
@@ -94,9 +110,9 @@ LAMBDAS_PARADAS={}
 s=subprocess.Popen([ 'bash','./mediciones/calcula_lambdas_paradas' ], stdout=subprocess.PIPE)
 for l in s.stdout:
   s=l.split(',')
-  p=int(s[0])   # parada
-  l=float(s[1]) # lambda
-  LAMBDAS_PARADAS[p]=l
+  p=int(s[0])     # parada
+  la=float(s[1])  # lambda
+  LAMBDAS_PARADAS[p]=la
   
 #
 # Lee para cada linea cuál es el lambda de arribo a su primer parada
@@ -181,6 +197,7 @@ TPANT={}
 TPULT={}
 DELTAP=[]
 PROXIMO={}
+PARO_VECES={}
 
 for p in PARADAS:
   PP[p]=int(round(stats.norm.rvs()*math.sqrt(S2[p])+MU[p],0))
@@ -212,6 +229,12 @@ try:
       # -----------------------
       if seg==PROXIMO[l]:
         # 1) inyecta colectivo
+        print "seg="+str(seg)+" linea="+str(l)
+        vid=str(l)+"."+str(seg)
+        rid="linea_"+str(l)
+        PARO_VECES[vid]=0
+        if l!=178:
+          traci.vehicle.add(vehID=vid, routeID=rid, typeID="bus_100")
         # 2) calcula el próximo
         va=stats.expon.rvs(scale=LAMBDAS_LINEAS[l])
         PROXIMO[l]=int(va)+seg
@@ -224,34 +247,39 @@ try:
   
     # Llegada de colectivos a parada
     # ------------------------------
-    if True==True:
-      p=1  # OJO, acá hay que ver a qué parada llegó el colectivo
-      l=17 # OJO, acá hay que ver a qué linea corresponde el colectivo
+    for v in traci.vehicle.getIDList():
+      if traci.vehicle.isAtBusStop(v):
+        PARO_VECES[v]=PARO_VECES[v]+1
+        #linea=v.partition(".")[0]
+        print "seg="+str(seg)+" vehiculo "+v+" en su parada nro "+str(PARO_VECES[v])
+        p=1  # OJO, acá hay que ver a qué parada llegó el colectivo
+        l=17 # OJO, acá hay que ver a qué linea corresponde el colectivo
+    
+        if (p,l) not in TULT: # Es la primer llegada de la linea a la parada
+          TULT[p,l]=0
+    
+        # tt significa tiempo transcurrido
+        tt=seg-TULT[p,l]
+    
+        suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
+        tdet=round(stats.expon.rvs(scale=LAMBDA_TIEMPO_SUBIR*tt),0)
+    
+        # Cálculos para determinar factor de contracción
+        if p==PRIMER_PARADA[l]:
+          if l not in TPANT:
+            TPANT[l]=seg
+          else:
+            DELTAP.append(seg-TPANT[l])
+            TPANT[l]=seg
+    
+        # Establecer detención
+        # traci.vehicle.setBusStop(v,tdet*1000)
   
-      if (p,l) not in TULT: # Es la primer llegada de la linea a la parada
-        TULT[p,l]=0
-  
-      # tt significa tiempo transcurrido
-      tt=seg-TULT[p,l]
-  
-      suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
-      tdet=round(stats.expon.rvs(scale=LAMBDA_TIEMPO_SUBIR*tt),0)
-  
-      # Cálculos para determinar factor de contracción
-      if p==PRIMER_PARADA[l]:
-        if l not in TPANT:
-          TPANT[l]=seg
+    
+        if PP[p] < suben:
+          PP[p]=0
         else:
-          DELTAP.append(seg-TPANT[l])
-          TPANT[l]=seg
-  
-      # Establecer detención
-
-  
-      if PP[p] < suben:
-        PP[p]=0
-      else:
-        PP[p]-=suben
+          PP[p]-=suben
 except traci.FatalTraCIError:
     print ""
 
