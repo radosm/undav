@@ -38,26 +38,26 @@ traci.init(PORT)
 
 belgrano="-9468"
 
-traci.lane.setDisallowed('--9433_0','bus')
+traci.lane.setDisallowed('--9433_0',"bus")
 
 # Primera cuadra de Belgrano
-traci.lane.setDisallowed(belgrano+'#1_2','bus')
-traci.lane.setDisallowed(belgrano+'#1_3','bus')
+traci.lane.setDisallowed(belgrano+'#1_2',"bus")
+traci.lane.setDisallowed(belgrano+'#1_3',"bus")
 # Segunda cuadra de Belgrano
-traci.lane.setDisallowed(belgrano+'#2_2','bus')
-traci.lane.setDisallowed(belgrano+'#2_3','bus')
+traci.lane.setDisallowed(belgrano+'#2_2',"bus")
+traci.lane.setDisallowed(belgrano+'#2_3',"bus")
 # Tercera cuadra de Belgrano
-traci.lane.setDisallowed(belgrano+'#3_2','bus')
-traci.lane.setDisallowed(belgrano+'#3_3','bus')
+traci.lane.setDisallowed(belgrano+'#3_2',"bus")
+traci.lane.setDisallowed(belgrano+'#3_3',"bus")
 # Cuarta cuadra de Belgrano
-traci.lane.setDisallowed(belgrano+'#4_2','bus')
-traci.lane.setDisallowed(belgrano+'#4_3','bus')
+traci.lane.setDisallowed(belgrano+'#4_2',"bus")
+traci.lane.setDisallowed(belgrano+'#4_3',"bus")
 # Quinta cuadra de Belgrano
-traci.lane.setDisallowed(belgrano+'#5_2','bus')
-traci.lane.setDisallowed(belgrano+'#5_3','bus')
+traci.lane.setDisallowed(belgrano+'#5_2',"bus")
+traci.lane.setDisallowed(belgrano+'#5_3',"bus")
 # Sexta cuadra de Belgrano
-traci.lane.setDisallowed(belgrano+'#6_2','bus')
-traci.lane.setDisallowed(belgrano+'#6_3','bus')
+traci.lane.setDisallowed(belgrano+'#6_2',"bus")
+traci.lane.setDisallowed(belgrano+'#6_3',"bus")
 
 ########################################
 ########################################
@@ -233,7 +233,7 @@ try:
         PARO_VECES[vid]=0
         PARO_ULTIMA[vid]=""
         if l!=178:
-          traci.vehicle.add(vehID=vid, routeID=rid, typeID="bus_100")
+          traci.vehicle.add(vehID=vid, routeID=rid, typeID="colectivo")
         # 2) calcula el próximo
         va=stats.expon.rvs(scale=LAMBDAS_LINEAS[l])
         PROXIMO[l]=int(va)+seg
@@ -248,13 +248,14 @@ try:
     # ------------------------------
     for v in traci.vehicle.getIDList():
       if traci.vehicle.isAtBusStop(v):
-        l=int(v.partition(".")[0])
-        p=PARADAS_LINEA[l][PARO_VECES[v]]
         #print PARO_ULTIMA[v]+" - "+traci.vehicle.getRoadID(v)
         if PARO_ULTIMA[v]!=traci.vehicle.getRoadID(v):
           PARO_ULTIMA[v]=traci.vehicle.getRoadID(v)
-          PARO_VECES[v]=PARO_VECES[v]+1
+
+          l=int(v.partition(".")[0])
+          p=PARADAS_LINEA[l][PARO_VECES[v]]
           ps="p%02d" % p
+          PARO_VECES[v]=PARO_VECES[v]+1
       
           if (p,l) not in TULT: # Es la primer llegada de la linea a la parada
             TULT[p,l]=0
@@ -276,6 +277,12 @@ try:
               TPANT[l]=seg
       
           # Establecer detención
+          cuadra=traci.vehicle.getRoadID(v)
+          carril=traci.vehicle.getLaneIndex(v)
+          tipo=traci.vehicle.getTypeID(v)
+          velocidad=traci.vehicle.getSpeed(v)
+          posicion=traci.vehicle.getLanePosition(v)
+          print "Estableciendo detención, linea="+str(l)+" carril="+cuadra+"_"+str(carril)+" velocidad="+str(velocidad)
           traci.vehicle.setBusStop(v,ps,tdet*1000)
       
           if PP[p] < suben:
