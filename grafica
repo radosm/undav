@@ -1,0 +1,30 @@
+set terminal x11 size 1366,768
+set multiplot layout 3,4 title "Gente en paradas"
+unset key
+set xtics rotate
+set xrange [0:7500]
+set title "Parada 1"
+plot "personas_parada1.txt" with lines
+set title "Parada 2"
+plot "personas_parada2.txt" with lines
+set title "Parada 3"
+plot "personas_parada3.txt" with lines
+set title "Parada 4"
+plot "personas_parada4.txt" with lines
+set title "Parada 5"
+plot "personas_parada5.txt" with lines
+set title "Parada 6"
+plot "personas_parada6.txt" with lines
+set title "Parada 7"
+plot "personas_parada7.txt" with lines
+set title "Parada 8"
+plot "personas_parada8.txt" with lines
+set title "Parada 9"
+plot "personas_parada9.txt" with lines
+set title "Parada 10"
+plot "personas_parada10.txt" with lines
+set title "Parada 11"
+plot "personas_parada11.txt" with lines
+set title "Parada 12"
+plot "personas_parada12.txt" with lines
+unset multiplot

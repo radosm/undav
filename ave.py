@@ -101,6 +101,23 @@ for l in f:
 f.close()
 
 #
+# Array que contiene en qué cuadra está cada parada
+#
+CUADRA_PARADA={}
+CUADRA_PARADA[1]=belgrano+'#2'
+CUADRA_PARADA[2]=belgrano+'#3'
+CUADRA_PARADA[3]=belgrano+'#3'
+CUADRA_PARADA[4]=belgrano+'#3'
+CUADRA_PARADA[5]=belgrano+'#4'
+CUADRA_PARADA[6]=belgrano+'#4'
+CUADRA_PARADA[7]=belgrano+'#4'
+CUADRA_PARADA[8]=belgrano+'#4'
+CUADRA_PARADA[9]=belgrano+'#5'
+CUADRA_PARADA[10]=belgrano+'#5'
+CUADRA_PARADA[11]=belgrano+'#6'
+CUADRA_PARADA[12]=belgrano+'#6'
+
+#
 # Lee para cada parada cuál es el lambda de arribo de personas
 #
 LAMBDAS_PARADAS={}
@@ -189,10 +206,10 @@ for p in PARADAS:
 PP={}
 TANT={}
 TULT={}
-DELTA=[]
+DELTA={}
 TPANT={}
 TPULT={}
-DELTAP=[]
+DELTAP={}
 PROXIMO={}
 PARO_VECES={}
 PARO_ULTIMA={}
@@ -207,15 +224,26 @@ for p in PARADAS:
 for l in LINEAS:
     va=stats.expon.rvs(scale=LAMBDAS_LINEAS[l])
     PROXIMO[l]=int(va)
+    DELTA[l]=[]
+    DELTAP[l]=[]
 
 try:
+  
+  f={}
+  for p in PARADAS:
+    f[p]=open("personas_parada"+str(p)+".txt","w")
+
   #
   # Ciclo principal
   #
   for seg in range (1,TS):
 
+    # Transcurre 1 segundo en la simulación
+    # -------------------------------------
     traci.simulationStep()
 
+    # Arribo de personas
+    # ------------------
     for p in PARADAS:
       PP[p]+=AP[p,seg]
     
@@ -241,19 +269,29 @@ try:
         if l not in TANT:
           TANT[l]=seg
         else:
-          DELTA.append(seg-TANT[l])
+          DELTA[l].append(seg-TANT[l])
           TANT[l]=seg
   
     # Llegada de colectivos a parada
     # ------------------------------
     for v in traci.vehicle.getIDList():
       if traci.vehicle.isAtBusStop(v):
-        #print PARO_ULTIMA[v]+" - "+traci.vehicle.getRoadID(v)
         if PARO_ULTIMA[v]!=traci.vehicle.getRoadID(v):
           PARO_ULTIMA[v]=traci.vehicle.getRoadID(v)
 
           l=int(v.partition(".")[0])
-          p=PARADAS_LINEA[l][PARO_VECES[v]]
+          cuadra=traci.vehicle.getRoadID(v)
+          carril=traci.vehicle.getLaneIndex(v)
+          tipo=traci.vehicle.getTypeID(v)
+          velocidad=traci.vehicle.getSpeed(v)
+          posicion=traci.vehicle.getLanePosition(v)
+
+          for i in range (0,len(PARADAS_LINEA[l])):
+            j=PARADAS_LINEA[l][i]
+             
+            if CUADRA_PARADA[j]==cuadra:
+              p=j
+
           ps="p%02d" % p
           PARO_VECES[v]=PARO_VECES[v]+1
       
@@ -266,23 +304,17 @@ try:
           suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
           tdet=round(stats.expon.rvs(scale=LAMBDA_TIEMPO_SUBIR*suben),0)
 
-          print "seg="+str(seg)+" vehiculo "+v+" en su parada nro "+str(PARO_VECES[v])+", la parada es la "+ps+" tdet="+str(tdet)+" suben="+str(suben)
+          print "seg="+str(seg)+" vehiculo "+v+" en su detención nro "+str(PARO_VECES[v])+", la parada es la "+ps+" tdet="+str(tdet)+" suben="+str(suben)
       
           # Cálculos para determinar factor de contracción
           if p==PRIMER_PARADA[l]:
             if l not in TPANT:
               TPANT[l]=seg
             else:
-              DELTAP.append(seg-TPANT[l])
+              DELTAP[l].append(seg-TPANT[l])
               TPANT[l]=seg
       
           # Establecer detención
-          cuadra=traci.vehicle.getRoadID(v)
-          carril=traci.vehicle.getLaneIndex(v)
-          tipo=traci.vehicle.getTypeID(v)
-          velocidad=traci.vehicle.getSpeed(v)
-          posicion=traci.vehicle.getLanePosition(v)
-          print "Estableciendo detención, linea="+str(l)+" carril="+cuadra+"_"+str(carril)+" velocidad="+str(velocidad)
           traci.vehicle.setBusStop(v,ps,tdet*1000)
       
           if PP[p] < suben:
@@ -290,8 +322,18 @@ try:
           else:
             PP[p]-=suben
 
+    # Para grafico de PP
+    # ------------------
+    for p in PARADAS:
+      f[p].write(str(seg)+" "+str(int(PP[p]))+"\n")
+
 except traci.FatalTraCIError:
     print ""
+
+for p in PARADAS:
+    f[p].close()
+
+traci.close()
 
 ########################################
 ########################################
@@ -348,5 +390,5 @@ except traci.FatalTraCIError:
 # 
 # except traci.FatalTraCIError:
 #     print ""
-
-traci.close()
+#
+# trace.close()
