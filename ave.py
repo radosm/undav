@@ -1,22 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 """
-@file    runner.py
+@file    Ave.py
 @author  Martin Rados
 @date    2016-04-08
 
-Prueba de ruteo y detencion
+Simulación Avellaneda
 """
 import os, sys, subprocess, math
 from time import sleep
 import scipy.stats as stats
 
-PORT = 8813
-
 ####################################################
 # Levanta SUMO
 ####################################################
  
+PORT = 8813
 ret = subprocess.Popen(["sumo-gui", "-c", "ave.sumo.cfg" , "--step-length", "1" , "--remote-port" , str(PORT)])
 sleep(1) 
 
@@ -63,7 +62,7 @@ traci.lane.setDisallowed(belgrano+'#6_3',"bus")
 ########################################
 
 #
-# Tiempo de simulacion (en segundos)
+# Tiempo de simulación (en segundos)
 #
 TS=7200
 
@@ -212,6 +211,7 @@ TPULT={}
 DELTAP={}
 PROXIMO={}
 PARO_VECES={}
+PARADA_ESPERADA={}
 PARO_ULTIMA={}
 
 for p in PARADAS:
@@ -259,6 +259,7 @@ try:
         vid=str(l)+"."+str(seg)
         rid="linea_"+str(l)
         PARO_VECES[vid]=0
+        PARADA_ESPERADA[vid]=0
         PARO_ULTIMA[vid]=""
         if l!=178:
           traci.vehicle.add(vehID=vid, routeID=rid, typeID="colectivo")
@@ -275,22 +276,28 @@ try:
     # Llegada de colectivos a parada
     # ------------------------------
     for v in traci.vehicle.getIDList():
-      if traci.vehicle.isAtBusStop(v):
-        if PARO_ULTIMA[v]!=traci.vehicle.getRoadID(v):
-          PARO_ULTIMA[v]=traci.vehicle.getRoadID(v)
+      l=int(v.partition(".")[0])
+      cuadra=traci.vehicle.getRoadID(v)
+      carril=traci.vehicle.getLaneIndex(v)
+      tipo=traci.vehicle.getTypeID(v)
+      velocidad=traci.vehicle.getSpeed(v)
+      posicion=traci.vehicle.getLanePosition(v)
 
-          l=int(v.partition(".")[0])
-          cuadra=traci.vehicle.getRoadID(v)
-          carril=traci.vehicle.getLaneIndex(v)
-          tipo=traci.vehicle.getTypeID(v)
-          velocidad=traci.vehicle.getSpeed(v)
-          posicion=traci.vehicle.getLanePosition(v)
+      if traci.vehicle.isAtBusStop(v):
+        if PARO_ULTIMA[v]!=cuadra:
+          PARO_ULTIMA[v]=cuadra
 
           for i in range (0,len(PARADAS_LINEA[l])):
             j=PARADAS_LINEA[l][i]
              
             if CUADRA_PARADA[j]==cuadra:
               p=j
+              break
+
+          if i!=PARADA_ESPERADA[v]:
+            print "vehiculo "+v+" se salteó "+str(i-PARADA_ESPERADA[v])+" parada/s"
+
+          PARADA_ESPERADA[v]=i+1
 
           ps="p%02d" % p
           PARO_VECES[v]=PARO_VECES[v]+1
