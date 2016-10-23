@@ -155,7 +155,11 @@ for l in s.stdout:
 #
 s=subprocess.Popen( ['bash','./mediciones/lambda_tiempo_subir'],stdout=subprocess.PIPE)
 for l in s.stdout:
-  LAMBDA_TIEMPO_SUBIR=float(l)
+  s=l.split(',')
+  mu=float(s[0])    # mu
+  si2=float(s[1])   # sigma^2
+  MU_TIEMPO_SUBIR=mu
+  SIGMA2_TIEMPO_SUBIR=si2/4
 
 #
 # Lee cuáles son las primeras paradas de cada linea
@@ -215,11 +219,12 @@ PARADA_ESPERADA={}
 PARO_ULTIMA={}
 
 for p in PARADAS:
-  PP[p]=int(round(stats.norm.rvs()*math.sqrt(S2[p])+MU[p],0))
-  if PP[p] < 0:
-    PP[p]=0
-  if PP[p] > MAX[p]:
-    PP[p]=MAX[p]
+  PP[p]=0
+  ##PP[p]=int(round(stats.norm.rvs()*math.sqrt(S2[p])+MU[p],0))
+  ##if PP[p] < 0:
+    ##PP[p]=0
+  ##if PP[p] > MAX[p]:
+    ##PP[p]=MAX[p]
 
 for l in LINEAS:
     va=stats.expon.rvs(scale=LAMBDAS_LINEAS[l])
@@ -246,6 +251,14 @@ try:
     # ------------------
     for p in PARADAS:
       PP[p]+=AP[p,seg]
+      print int(AP[p,seg]),
+      if PP[p] < 0:
+        PP[p]=0
+      if PP[p] > MAX[p]:
+        print "parada "+str(p)+" saturada!, maxima cantidad observada="+str(MAX[p])
+        PP[p]=MAX[p]
+
+    print
     
     # Ve si hay que inyectar un nuevo colectivo
     # -----------------------------------------
@@ -309,7 +322,14 @@ try:
           tt=seg-TULT[p,l]
       
           suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
-          tdet=round(stats.expon.rvs(scale=LAMBDA_TIEMPO_SUBIR*suben),0)
+          if suben > 40:
+            suben=40
+          if suben>PP[p]:
+            suben=PP[p]
+
+          tdet=round((suben-5)*(stats.norm.rvs()*math.sqrt(SIGMA2_TIEMPO_SUBIR)+MU_TIEMPO_SUBIR),0)
+          if tdet<0:
+            tdet=1
 
           print "seg="+str(seg)+" vehiculo "+v+" en su detención nro "+str(PARO_VECES[v])+", la parada es la "+ps+" tdet="+str(tdet)+" suben="+str(suben)
       
@@ -324,10 +344,7 @@ try:
           # Establecer detención
           traci.vehicle.setBusStop(v,ps,tdet*1000)
       
-          if PP[p] < suben:
-            PP[p]=0
-          else:
-            PP[p]-=suben
+          PP[p]-=suben
 
     # Para grafico de PP
     # ------------------

@@ -9,15 +9,17 @@ cd $(dirname $0)
   if (NR==1) {
     # Inicialización de variables
     # ---------------------------
-    tiempo_subir=0;cant=0
+    tiempo_subir=0;cant=0;sxi=0;s2xi
   }
 
   tdet=$6
   suben=$7
   if (suben>0) {
     cant++
-    tiempo_subir+=(tdet/suben)
+    xi=tdet/suben
+    sxi+=xi
+    s2xi+=xi^2
   }
 } 
-END { print tiempo_subir/cant }'
+END { print sxi/cant","cant/(cant-1)*(s2xi/cant-(sxi/cant)^2) }'
 #END { print "lambda_tiempo_subir="(tiempo_subir/cant)" (en segundos)." }'
