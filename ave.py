@@ -64,7 +64,7 @@ traci.lane.setDisallowed(belgrano+'#6_3',"bus")
 #
 # Tiempo de simulación (en segundos)
 #
-TS=7200
+TS=3600+900
 
 #
 # Lee cuáles son las paradas existentes
@@ -196,7 +196,7 @@ for l in s.stdout:
 AP={}
 for p in PARADAS:
   remanente=0
-  for seg in range (1,TS):
+  for seg in range (1,TS +1):
     va=stats.expon.rvs(scale=LAMBDAS_PARADAS[p])
     llegan,r=divmod(va+remanente,1)
     remanente=va+remanente-llegan
@@ -215,6 +215,7 @@ TPULT={}
 DELTAP={}
 PROXIMO={}
 PARO_VECES={}
+GENTE={}
 PARADA_ESPERADA={}
 PARO_ULTIMA={}
 
@@ -234,6 +235,9 @@ for l in LINEAS:
 
 try:
   
+  total_colectivos=0
+  total_gente=0
+  total_arribo_gente=0
   f={}
   for p in PARADAS:
     f[p]=open("personas_parada"+str(p)+".txt","w")
@@ -241,8 +245,18 @@ try:
   #
   # Ciclo principal
   #
-  for seg in range (1,TS):
+  for seg in range (1,TS +1):
 
+    # Factor para ajustar lambda de llegada de personas
+    # -------------------------------------------------
+    if seg <= TS/3:
+      factor=float(seg)/TS
+    elif seg <= 2*TS/3:
+      factor=float(1)/3
+    else:
+      factor=float((TS-seg))/TS
+    factor=factor*3
+     
     # Transcurre 1 segundo en la simulación
     # -------------------------------------
     traci.simulationStep()
@@ -250,15 +264,18 @@ try:
     # Arribo de personas
     # ------------------
     for p in PARADAS:
+      PPA=PP[p]
       PP[p]+=AP[p,seg]
-      print int(AP[p,seg]),
+      #print int(AP[p,seg]),
       if PP[p] < 0:
         PP[p]=0
       if PP[p] > MAX[p]:
         print "parada "+str(p)+" saturada!, maxima cantidad observada="+str(MAX[p])
         PP[p]=MAX[p]
+    
+      total_arribo_gente+=PP[p]-PPA
 
-    print
+    #print
     
     # Ve si hay que inyectar un nuevo colectivo
     # -----------------------------------------
@@ -272,10 +289,11 @@ try:
         vid=str(l)+"."+str(seg)
         rid="linea_"+str(l)
         PARO_VECES[vid]=0
+        GENTE[vid]=int(stats.uniform.rvs()*50)
         PARADA_ESPERADA[vid]=0
         PARO_ULTIMA[vid]=""
-        if l!=178:
-          traci.vehicle.add(vehID=vid, routeID=rid, typeID="colectivo")
+        traci.vehicle.add(vehID=vid, routeID=rid, typeID="colectivo")
+        total_colectivos+=1
         # 2) calcula el próximo
         va=stats.expon.rvs(scale=LAMBDAS_LINEAS[l])
         PROXIMO[l]=int(va)+seg
@@ -298,6 +316,7 @@ try:
 
       if traci.vehicle.isAtBusStop(v):
         if PARO_ULTIMA[v]!=cuadra:
+          
           PARO_ULTIMA[v]=cuadra
 
           for i in range (0,len(PARADAS_LINEA[l])):
@@ -321,11 +340,15 @@ try:
           # tt significa tiempo transcurrido
           tt=seg-TULT[p,l]
       
-          suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
-          if suben > 40:
-            suben=40
+          suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*factor*tt),0)
           if suben>PP[p]:
             suben=PP[p]
+          if suben > 50-GENTE[v]:
+            suben=50-GENTE[v]
+
+          GENTE[v]+=suben
+
+          total_gente+=suben
 
           tdet=round((suben-5)*(stats.norm.rvs()*math.sqrt(SIGMA2_TIEMPO_SUBIR)+MU_TIEMPO_SUBIR),0)
           if tdet<0:
@@ -357,62 +380,12 @@ except traci.FatalTraCIError:
 for p in PARADAS:
     f[p].close()
 
+print
+print "cantidad total de colectivos que ingresan=",
+print total_colectivos
+print "cantidad total de personas que suben a algún colectivo=",
+print total_gente
+print "cantidad total de personas que arriba a paradas=",
+print total_arribo_gente
+
 traci.close()
-
-########################################
-########################################
-
-
-# try:
-#     while step < 6000:
-#         step += 1
-#         traci.simulationStep()
-#         print "STEP: ", step
-# 
-#         parados_100=0
-# 
-#         for v in traci.vehicle.getIDList():
-#             cuadra=traci.vehicle.getRoadID(v)
-#             carril=traci.vehicle.getLaneIndex(v)
-#             tipo=traci.vehicle.getTypeID(v)
-#             velocidad=traci.vehicle.getSpeed(v)
-#             posicion=traci.vehicle.getLanePosition(v)
-#             linea=v.partition(".")[0]
-#             nro=int(v.partition(".")[2])
-# 
-#             if nro <=5 and velocidad < 0.01 and posicion > 30 and not traci.vehicle.isAtBusStop(v):
-#                 if linea=="linea100":
-#                     # aca iria un setStop
-#                     #traci.vehicle.setStop(v,cuadra,posicion+0.1,carril,5000)
-#                     parados_100=parados_100+1
-# 
-#             if traci.vehicle.isAtBusStop(v):
-#                 if linea=="linea100":
-#                     ya_paro[nro]=True
-#                     parados_100=parados_100+1
-# 
-#                 if linea=="linea101":
-#                     if nro>=ult101:
-#                       ult101=ult101+1
-#                       traci.vehicle.setBusStop(v,'p2',000)
-# 
-#             print linea+" "+str(nro)+" "+cuadra+" "+str(carril)+" "+tipo+" "+str(velocidad)
-#             print "cant parados:"+str(parados_100)
-#             
-#             if nro <= 5 and posicion > 30 and linea=="linea100" and parados_100 < 2:
-#                if parados_100 < 1:
-#                    try:
-#                        if not parada_solicitada[nro]:
-#                            parada_solicitada[nro]=True
-#                            traci.vehicle.setBusStop(v,'p1',5000)
-#                            # Si llega acá es porque va a parar
-#                            parada_aceptada[nro]=True
-#                    except:
-#                        print linea+" "+str(nro)+" "+"no va a parar"
-#                else:
-#                    print "ya hay suficientes parados" 
-# 
-# except traci.FatalTraCIError:
-#     print ""
-#
-# trace.close()
