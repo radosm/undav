@@ -191,6 +191,32 @@ for l in s.stdout:
   MAX[p]=mx
 
 #
+# Lee probabilidad de ocupación de cada línea en su primer parada
+#
+OCUPACION={}
+prob={}
+s=subprocess.Popen( ['bash','./mediciones/calcula_ocupacion_lineas'],stdout=subprocess.PIPE)
+for l in s.stdout:
+  s=l.split(',')
+  li=int(s[0])   # linea
+  prob[0]=round(float(s[1]),2) # proba vacío
+  prob[1]=round(float(s[2]),2) # proba asientos libres
+  prob[2]=round(float(s[3]),2) # proba sin asientos libres
+  prob[3]=round(float(s[4]),2) # completo
+
+  sum=0
+  OCUPACION[li]={}
+  for i in range(0,4):
+    if sum+prob[i]>1:
+      prob[i]=1-sum
+
+    sum+=prob[i]
+
+    OCUPACION[li][i]=prob[i]*100
+
+  OCUPACION[li][4]=round(1-sum,2)*100 # Tan completo que no se detiene
+
+#
 # Calcula array AP
 #
 AP={}
@@ -289,7 +315,28 @@ try:
         vid=str(l)+"."+str(seg)
         rid="linea_"+str(l)
         PARO_VECES[vid]=0
-        GENTE[vid]=int(stats.uniform.rvs()*50)
+        # Setea ocupación inicial
+        ocupacion=int(stats.uniform.rvs()*100)+1
+        tope=0
+        for i in range(0,5):
+          if OCUPACION[l][i]>0:
+            tope+=OCUPACION[l][i]
+            if ocupacion<=tope:
+              ocupacion_inicial=i
+          
+        if ocupacion_inicial==0:
+          GENTE[vid]=int(stats.uniform.rvs()*6)      # [0,5]
+        elif ocupacion_inicial==1:
+          GENTE[vid]=int(stats.uniform.rvs()*20)+6   # [6,20]
+        elif ocupacion_inicial==2:
+          GENTE[vid]=int(stats.uniform.rvs()*15)+26  # [26,40]
+        elif ocupacion_inicial==3:
+          GENTE[vid]=int(stats.uniform.rvs()*24)+41  # [41,64]
+        else:
+          GENTE[vid]=65
+
+        print "ocupacion="+str(ocupacion_inicial)+" #personas="+str(GENTE[vid])
+
         PARADA_ESPERADA[vid]=0
         PARO_ULTIMA[vid]=""
         traci.vehicle.add(vehID=vid, routeID=rid, typeID="colectivo")
@@ -343,8 +390,8 @@ try:
           suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*factor*tt),0)
           if suben>PP[p]:
             suben=PP[p]
-          if suben > 50-GENTE[v]:
-            suben=50-GENTE[v]
+          if suben > 65-GENTE[v]:
+            suben=65-GENTE[v]
 
           GENTE[v]+=suben
 

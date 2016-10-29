@@ -46,6 +46,16 @@ do
       $1="BAJAN";p=1;break
     case /# Personas/:
       $1="CPERS";p=1;break
+    case /Vacio/:
+      $1="VACIO";p=1;break
+    case /No vacío/:
+      $1="NOVACIO";p=1;break
+    case /No completo/:
+      $1="SINASIENTOS";p=1;break
+    case /Completo/:
+      $1="COMPLETO";p=1;break
+    case /Tan completo/:
+      $1="NOSUBENADIE";p=1;break
   } 
 
   if (p==1) { # Interesa imprimir esta línea

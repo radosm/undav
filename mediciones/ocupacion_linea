@@ -1,0 +1,27 @@
+# =====================================================================
+# Calcula la probabilidad de ocupacion de una línea en su primer parada
+# =====================================================================
+
+linea=$1
+parada=$(./primerparada $linea)
+
+if [ ! "$linea" -o ! "$parada" ]; then
+  echo "error, no se encuentra la primer parada de la linea $linea">&2
+  exit 1
+fi
+
+./selecciona mediciones.txt -parada $parada -linea $linea | awk -F, '{
+
+  if (NR==1) {
+    # Inicialización de variables
+    # ---------------------------
+    cant=0;cant0=0;cant1=0;cant2=0;cant3=0
+  }
+
+  cant++
+  if ($10==0) cant0++
+  if ($10==1) cant1++
+  if ($10==2) cant2++
+  if ($10==3) cant3++
+} 
+END { print cant0/cant","cant1/cant","cant2/cant","cant3/cant }'
