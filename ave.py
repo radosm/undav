@@ -16,7 +16,7 @@ import scipy.stats as stats
 ####################################################
  
 PORT = 8813
-ret = subprocess.Popen(["sumo-gui", "-c", "ave.sumo.cfg" , "--step-length", "1" , "--remote-port" , str(PORT)])
+ret = subprocess.Popen(["sumo-gui", "-c", "ave.sumo.cfg" , "--start", "--quit-on-end", "--time-to-teleport", "-1", "--step-length", "1" , "--remote-port" , str(PORT)])
 sleep(1) 
 
 
@@ -57,9 +57,6 @@ traci.lane.setDisallowed(belgrano+'#5_3',"bus")
 # Sexta cuadra de Belgrano
 traci.lane.setDisallowed(belgrano+'#6_2',"bus")
 traci.lane.setDisallowed(belgrano+'#6_3',"bus")
-
-########################################
-########################################
 
 #
 # Tiempo de simulación (en segundos)
@@ -244,6 +241,7 @@ PARO_VECES={}
 GENTE={}
 PARADA_ESPERADA={}
 PARO_ULTIMA={}
+EMPEZO_RECORRIDO={}
 
 for p in PARADAS:
   PP[p]=0
@@ -260,13 +258,21 @@ for l in LINEAS:
     DELTAP[l]=[]
 
 try:
-  
+  primer_cuadra=belgrano+"#1"
+  ultima_cuadra=belgrano+"#7"
   total_colectivos=0
   total_gente=0
   total_arribo_gente=0
+  total_arribo_gente_sin_restricciones=0
+  paradas_salteadas=0
+  terminaron_recorrido=0
+  tiempo_en_hacer_recorrido=0
+  llegaron_a_primer_parada=0
   f={}
   for p in PARADAS:
     f[p]=open("personas_parada"+str(p)+".txt","w")
+
+  tr=open("tiempo_recorrido.txt","w")
 
   #
   # Ciclo principal
@@ -300,9 +306,8 @@ try:
         PP[p]=MAX[p]
     
       total_arribo_gente+=PP[p]-PPA
+      total_arribo_gente_sin_restricciones+=AP[p,seg]
 
-    #print
-    
     # Ve si hay que inyectar un nuevo colectivo
     # -----------------------------------------
     for l in LINEAS:
@@ -351,16 +356,19 @@ try:
           DELTA[l].append(seg-TANT[l])
           TANT[l]=seg
   
-    # Llegada de colectivos a parada
-    # ------------------------------
+    # Procesamiento de vehiculos
+    # --------------------------
     for v in traci.vehicle.getIDList():
-      l=int(v.partition(".")[0])
+      l=int(v.split(".")[0])
+      seg_partida=int(v.split(".")[1])
       cuadra=traci.vehicle.getRoadID(v)
       carril=traci.vehicle.getLaneIndex(v)
       tipo=traci.vehicle.getTypeID(v)
       velocidad=traci.vehicle.getSpeed(v)
       posicion=traci.vehicle.getLanePosition(v)
 
+      # Llegada de colectivos a parada
+      # ------------------------------
       if traci.vehicle.isAtBusStop(v):
         if PARO_ULTIMA[v]!=cuadra:
           
@@ -375,6 +383,7 @@ try:
 
           if i!=PARADA_ESPERADA[v]:
             print "vehiculo "+v+" se salteó "+str(i-PARADA_ESPERADA[v])+" parada/s"
+            paradas_salteadas+=i-PARADA_ESPERADA[v]
 
           PARADA_ESPERADA[v]=i+1
 
@@ -390,9 +399,11 @@ try:
           suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*factor*tt),0)
           if suben>PP[p]:
             suben=PP[p]
-          if suben > 65-GENTE[v]:
-            suben=65-GENTE[v]
-
+          ##if suben > 65-GENTE[v]:
+            ##suben=65-GENTE[v]
+          if suben > 13:
+            suben=13
+          
           GENTE[v]+=suben
 
           total_gente+=suben
@@ -416,6 +427,19 @@ try:
       
           PP[p]-=suben
 
+      # Verificar si empezaron o terminaron el recorrido
+      # ------------------------------------------------
+      if cuadra==primer_cuadra:
+        EMPEZO_RECORRIDO[v]=1
+
+      if cuadra==ultima_cuadra:
+        traci.vehicle.remove(v)
+        terminaron_recorrido+=1
+        tiempo_en_hacer_recorrido+=seg-seg_partida
+        print "seg="+str(seg)+" el vehiculo "+v+" llegó al final del recorrido, demoró "+str(seg-seg_partida)+" segundos."
+        tr.write(str(seg)+" "+str(seg-seg_partida)+"\n")
+
+
     # Para grafico de PP
     # ------------------
     for p in PARADAS:
@@ -427,6 +451,8 @@ except traci.FatalTraCIError:
 for p in PARADAS:
     f[p].close()
 
+tr.close()
+
 print
 print "cantidad total de colectivos que ingresan=",
 print total_colectivos
@@ -434,5 +460,15 @@ print "cantidad total de personas que suben a algún colectivo=",
 print total_gente
 print "cantidad total de personas que arriba a paradas=",
 print total_arribo_gente
+print "cantidad total de personas que arriba a paradas (sin restricciones)=",
+print total_arribo_gente_sin_restricciones
+print "vehiculos que empezaron el recorrido=",
+print len(EMPEZO_RECORRIDO)
+print "vehiculos que terminaron el recorrido=",
+print terminaron_recorrido
+print "tiempo promedio en terminar el recorrido=",
+print tiempo_en_hacer_recorrido/terminaron_recorrido
+print "paradas salteadas=",
+print paradas_salteadas
 
 traci.close()

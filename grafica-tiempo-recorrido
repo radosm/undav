@@ -1,0 +1,6 @@
+set terminal x11 size 1366,768
+unset key
+set xtics rotate
+set xrange [0:4500]
+set title "Tiempo en completar recorrido"
+plot "tiempo_recorrido.txt" with lines
