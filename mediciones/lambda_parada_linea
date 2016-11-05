@@ -42,7 +42,7 @@ END {
   if (NR==1) {
     ant_hora=hora
     ant_suben=suben
-    lambda=0
+    mu=0
     cant=0
   } else {
     dif_hora=hora-ant_hora

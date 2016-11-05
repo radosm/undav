@@ -61,7 +61,12 @@ traci.lane.setDisallowed(belgrano+'#6_3',"bus")
 #
 # Tiempo de simulación (en segundos)
 #
-TS=3600+900
+t0=900
+t1=1800
+t2=2700
+t3=3600
+TS=4500
+p_ini=0.8
 
 #
 # Lee cuáles son las paradas existentes
@@ -156,7 +161,7 @@ for l in s.stdout:
   mu=float(s[0])    # mu
   si2=float(s[1])   # sigma^2
   MU_TIEMPO_SUBIR=mu
-  SIGMA2_TIEMPO_SUBIR=si2/4
+  SIGMA2_TIEMPO_SUBIR=si2 ## /4
 
 #
 # Lee cuáles son las primeras paradas de cada linea
@@ -220,7 +225,22 @@ AP={}
 for p in PARADAS:
   remanente=0
   for seg in range (1,TS +1):
-    va=stats.expon.rvs(scale=LAMBDAS_PARADAS[p])
+    # Factor para ajustar lambda de llegada de personas
+    # -------------------------------------------------
+    if seg <= t0:
+      factor=p_ini
+    elif seg <= t1:
+      factor=p_ini+(1-p_ini)*(float(seg)-t0)/float(t1-t0)
+    elif seg <= t2:
+      factor=float(1)
+    elif seg <= t3:
+      factor=1-(1-p_ini)*float(seg-t2)/float(t3-t2)
+    else:
+      factor=p_ini
+
+    factor=0.857
+
+    va=stats.expon.rvs(scale=LAMBDAS_PARADAS[p]*factor)
     llegan,r=divmod(va+remanente,1)
     remanente=va+remanente-llegan
     AP[p,seg]=llegan
@@ -279,16 +299,7 @@ try:
   #
   for seg in range (1,TS +1):
 
-    # Factor para ajustar lambda de llegada de personas
-    # -------------------------------------------------
-    if seg <= TS/3:
-      factor=float(seg)/TS
-    elif seg <= 2*TS/3:
-      factor=float(1)/3
-    else:
-      factor=float((TS-seg))/TS
-    factor=factor*3
-     
+
     # Transcurre 1 segundo en la simulación
     # -------------------------------------
     traci.simulationStep()
@@ -301,9 +312,9 @@ try:
       #print int(AP[p,seg]),
       if PP[p] < 0:
         PP[p]=0
-      if PP[p] > MAX[p]:
-        print "parada "+str(p)+" saturada!, maxima cantidad observada="+str(MAX[p])
-        PP[p]=MAX[p]
+      ####if PP[p] > MAX[p]:
+        ####print "parada "+str(p)+" saturada!, maxima cantidad observada="+str(MAX[p])
+        ####PP[p]=MAX[p]
     
       total_arribo_gente+=PP[p]-PPA
       total_arribo_gente_sin_restricciones+=AP[p,seg]
@@ -396,11 +407,12 @@ try:
           # tt significa tiempo transcurrido
           tt=seg-TULT[p,l]
       
-          suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*factor*tt),0)
+          suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
+
           if suben>PP[p]:
             suben=PP[p]
-          ##if suben > 65-GENTE[v]:
-            ##suben=65-GENTE[v]
+          if suben > 65-GENTE[v]:
+            suben=65-GENTE[v]
           if suben > 13:
             suben=13
           
