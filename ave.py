@@ -319,6 +319,7 @@ try:
     # ------------------
     for p in PARADAS:
       PPA=PP[p]
+
       PP[p]+=AP[p,seg]
       #print int(AP[p,seg]),
       if PP[p] < 0:
@@ -363,7 +364,7 @@ try:
         else:
           GENTE[vid]=65
 
-        print "ocupacion="+str(ocupacion_inicial)+" #personas="+str(GENTE[vid])
+        print "Colectivo="+vid+" ocupacion inicial="+str(ocupacion_inicial)+" #personas="+str(GENTE[vid])
 
         PARADA_ESPERADA[vid]=0
         PARO_ULTIMA[vid]=""
@@ -421,22 +422,26 @@ try:
       
           suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
           suben_normal=round(stats.norm.rvs()*math.sqrt(s2_normal_suben)+mu_normal_suben,0)
+
           if suben_normal<0:
             suben_normal=round(mu_normal_suben,0)
 
+          ##if suben > suben_normal:
+            ##suben=round(0.25*suben+0.75*suben_normal,0)
+
+          if suben > 75-GENTE[v]:
+            suben=75-GENTE[v]
+
           if suben>PP[p]:
             suben=PP[p]
-          if suben > 65-GENTE[v]:
-            suben=65-GENTE[v]
-          if suben > 8: ##suben_normal:
-            suben=8 ##suben_normal
           
           GENTE[v]+=suben
 
           total_gente+=suben
 
-          tdet=round((suben-5)*(stats.norm.rvs()*math.sqrt(SIGMA2_TIEMPO_SUBIR)+MU_TIEMPO_SUBIR),0)
-          if tdet<0:
+          ##tdet=round((suben-5)*(stats.norm.rvs()*math.sqrt(SIGMA2_TIEMPO_SUBIR)+MU_TIEMPO_SUBIR),0)
+          tdet=7.5*(suben*(suben+1)) / 60
+          if tdet<1:
             tdet=1
 
           print "seg="+str(seg)+" vehiculo "+v+" en su detención nro "+str(PARO_VECES[v])+", la parada es la "+ps+" tdet="+str(tdet)+" suben="+str(suben)
@@ -480,6 +485,16 @@ for p in PARADAS:
 
 tr.close()
 
+print
+print "FIN SIMULACION!"
+print
+for v in GENTE:
+  marca=""
+  if GENTE[v]>75:
+    marca="*** "
+  print marca+"vehiculo="+v+" cantidad de personas="+str(GENTE[v])
+print
+print "TOTALES:"
 print
 print "cantidad total de colectivos que ingresan=",
 print total_colectivos
