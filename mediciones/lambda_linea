@@ -21,6 +21,7 @@ fi
   ##print $0 #debug
   cant++
   hora=$5
+  ##print hora,ant,hora-ant #debug
   dif+=hora-ant
   ant=hora
 } 

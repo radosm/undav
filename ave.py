@@ -219,6 +219,15 @@ for l in s.stdout:
   OCUPACION[li][4]=round(1-sum,2)*100 # Tan completo que no se detiene
 
 #
+# Lee parámetros de distribución normal de cant de personas que suben a un colectivo
+#
+s=subprocess.Popen( ['bash','./mediciones/normal_suben'],stdout=subprocess.PIPE)
+for l in s.stdout:
+  s=l.split(',')
+  mu_normal_suben=float(s[0])   # mu
+  s2_normal_suben=float(s[1])   # sigma^2
+
+#
 # Calcula array AP
 #
 AP={}
@@ -257,6 +266,7 @@ TPANT={}
 TPULT={}
 DELTAP={}
 PROXIMO={}
+LLEGARON={}
 PARO_VECES={}
 GENTE={}
 PARADA_ESPERADA={}
@@ -276,6 +286,7 @@ for l in LINEAS:
     PROXIMO[l]=int(va)
     DELTA[l]=[]
     DELTAP[l]=[]
+    LLEGARON[l]=0
 
 try:
   primer_cuadra=belgrano+"#1"
@@ -326,6 +337,7 @@ try:
       # Partida de un colectivo
       # -----------------------
       if seg==PROXIMO[l]:
+        LLEGARON[l]+=1
         # 1) inyecta colectivo
         print "seg="+str(seg)+" linea="+str(l)
         vid=str(l)+"."+str(seg)
@@ -408,13 +420,16 @@ try:
           tt=seg-TULT[p,l]
       
           suben=round(stats.expon.rvs(scale=LAMBDAS_PARADAS_LINEAS[p,l]*tt),0)
+          suben_normal=round(stats.norm.rvs()*math.sqrt(s2_normal_suben)+mu_normal_suben,0)
+          if suben_normal<0:
+            suben_normal=round(mu_normal_suben,0)
 
           if suben>PP[p]:
             suben=PP[p]
           if suben > 65-GENTE[v]:
             suben=65-GENTE[v]
-          if suben > 13:
-            suben=13
+          if suben > 8: ##suben_normal:
+            suben=8 ##suben_normal
           
           GENTE[v]+=suben
 
@@ -482,5 +497,7 @@ print "tiempo promedio en terminar el recorrido=",
 print tiempo_en_hacer_recorrido/terminaron_recorrido
 print "paradas salteadas=",
 print paradas_salteadas
+print "arribo de colectivos=",
+print LLEGARON
 
 traci.close()

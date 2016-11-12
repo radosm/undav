@@ -1,1 +1,7 @@
 josm*
+*.txt
+*.gif
+*.png
+*bak
+*log
+gaston.py
