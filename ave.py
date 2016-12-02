@@ -440,7 +440,9 @@ try:
           total_gente+=suben
 
           ##tdet=round((suben-5)*(stats.norm.rvs()*math.sqrt(SIGMA2_TIEMPO_SUBIR)+MU_TIEMPO_SUBIR),0)
-          tdet=7.5*(suben*(suben+1)) / 60
+          ##tdet=(14.0/50)*((suben*(suben+1)) / 2)
+          ##tdet=(0.6)*((suben*(suben+1)) / 2)
+          tdet=30
           if tdet<1:
             tdet=1
 
