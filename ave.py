@@ -61,12 +61,15 @@ traci.lane.setDisallowed(belgrano+'#6_3',"bus")
 #
 # Tiempo de simulación (en segundos)
 #
-t0=900
-t1=1800
-t2=2700
-t3=3600
+t1=1500.0
+t2=2250.0
+t3=3000.0
+t4=4500.0
 TS=4500
-p_ini=0.8
+a=1.5
+b=(t4*(2-a))/(t3-t1)
+
+print a,b
 
 #
 # Lee cuáles son las paradas existentes
@@ -236,18 +239,16 @@ for p in PARADAS:
   for seg in range (1,TS +1):
     # Factor para ajustar lambda de llegada de personas
     # -------------------------------------------------
-    if seg <= t0:
-      factor=p_ini
-    elif seg <= t1:
-      factor=p_ini+(1-p_ini)*(float(seg)-t0)/float(t1-t0)
+    if seg <= t1:
+      factor=(a/t1)*seg
     elif seg <= t2:
-      factor=float(1)
+      factor=(a*(seg-t2))/(t1-t2)+(b*(seg-t1))/(t2-t1)
     elif seg <= t3:
-      factor=1-(1-p_ini)*float(seg-t2)/float(t3-t2)
+      factor=(b*(seg-t3))/(t2-t3)+(a*(seg-t2))/(t3-t2)
     else:
-      factor=p_ini
+      factor=(a*(seg-t4))/(t3-t4)
 
-    factor=0.857
+    factor=factor*(3000.0/3400)
 
     va=stats.expon.rvs(scale=LAMBDAS_PARADAS[p]*factor)
     llegan,r=divmod(va+remanente,1)
@@ -442,7 +443,8 @@ try:
           ##tdet=round((suben-5)*(stats.norm.rvs()*math.sqrt(SIGMA2_TIEMPO_SUBIR)+MU_TIEMPO_SUBIR),0)
           ##tdet=(14.0/50)*((suben*(suben+1)) / 2)
           ##tdet=(0.6)*((suben*(suben+1)) / 2)
-          tdet=30
+          ##tdet=30
+          tdet=suben*round((stats.norm.rvs()*math.sqrt(1)+2.0),0)
           if tdet<1:
             tdet=1
 
