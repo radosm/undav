@@ -1,0 +1,84 @@
+"Lugar, día, rango horario:",07/07/2015 16:45 a 18:00   -   Parada de 95 / 100 / 134 / 154 / 178 / 271 / 373 / 446 / 570,,,,,,,,
+Línea,178,100,271,570,373,373,570,271,271
+Hora,16:45,16:47,16:48,16:48,16:52,16:53,16:54,16:55,16:57
+Tiempo Detenido (segundos),40,30,45,40,40,45,50,50,30
+Suben,6,5,10,10,12,15,11,10,5
+Bajan,5,3,0,2,2,3,2,3,6
+Vacio,,,,,,,,,
+"No vacío, asientos libres",,,x,x,x,x,x,x,
+"No completo, sin asientos",x,x,,,,,,,x
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),36,30,30,36,40,40,20,20,15
+,,,,,,,,,
+Línea,154,570,178,100,271,373,373,154,134
+Hora,16:58,16:59,17:01,17:02,17:04,17:06,17:08,17:09,17:11
+Tiempo Detenido (segundos),0,25,20,15,80,90,90,0,20
+Suben,0,8,3,0,22,21,20,0,3
+Bajan,0,7,9,2,4,5,2,0,0
+Vacio,,,,,,,,,
+"No vacío, asientos libres",x,x,x,,,,x,x,x
+"No completo, sin asientos",,,,x,x,x,,,
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),12,14,10,13,36,41,45,20,30
+,,,,,,,,,
+Línea,271,95,271,446,570,271,373,95,570
+Hora,17:12,17:15,17:16,17:17,17:18,17:19,17:21,17:23,17:25
+Tiempo Detenido (segundos),30,30,120,20,40,40,25,20,30
+Suben,10,5,23,5,12,10,4,4,8
+Bajan,2,10,3,0,2,2,4,2,8
+Vacio,,,,,,,,,
+"No vacío, asientos libres",x,,,x,x,x,x,x,x
+"No completo, sin asientos",,x,x,,,,,,
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),30,45,45,35,35,35,21,25,34
+,,,,,,,,,
+Línea,373,100,271,134,178,373,95,570,271
+Hora,17:25,17:30,17:31,17:32,17:32,17:33,17:34,17:36,17:37
+Tiempo Detenido (segundos),60,20,60,35,110,50,20,20,40
+Suben,14,2,16,5,20,3,4,5,10
+Bajan,3,2,7,8,0,1,3,3,4
+Vacio,,,,,,,,,
+"No vacío, asientos libres",x,,,,,x,,x,x
+"No completo, sin asientos",,x,x,x,x,,x,,
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),35,45,45,45,45,45,45,45,45
+,,,,,,,,,
+Línea,178,178,271,95,178,100,100,271,373
+Hora,17:38,17:38,17:39,17:40,17:41,17:41,17:42,17:43,17:45
+Tiempo Detenido (segundos),25,20,110,10,10,15,10,50,40
+Suben,8,2,18,0,4,3,1,15,11
+Bajan,3,0,0,3,2,0,0,1,0
+Vacio,,,,,,,,,
+"No vacío, asientos libres",x,x,,x,x,x,x,,x
+"No completo, sin asientos",,,x,,,,,x,
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),45,32,37,37,25,24,25,25,36
+,,,,,,,,,
+Línea,134,95,271,570,271,570,373,271,373
+Hora,17:46,17:48,17:49,17:50,17:51,17:52,17:53,17:54,17:54
+Tiempo Detenido (segundos),30,30,40,40,30,25,20,20,10
+Suben,8,7,16,13,8,1,3,1,2
+Bajan,0,4,8,2,0,6,0,5,0
+Vacio,,,,,,,,,
+"No vacío, asientos libres",,,,,x,x,x,x,x
+"No completo, sin asientos",x,x,x,x,,,,,
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),36,34,30,30,20,15,19,18,17
+,,,,,,,,,
+Línea,178,100,178,446,570,95,100,271,
+Hora,17:55,17:56,17:57,17:58,17:59,17:59,18:00,18:00,
+Tiempo Detenido (segundos),40,10,15,20,40,20,10,30,
+Suben,9,0,1,2,9,0,0,7,
+Bajan,7,1,4,0,3,6,4,2,
+Vacio,,,,,,,,,
+"No vacío, asientos libres",,,,,,,,x,
+"No completo, sin asientos",x,x,x,x,x,x,x,,
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),19,19,18,18,23,23,23,26,

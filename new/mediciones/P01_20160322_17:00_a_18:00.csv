@@ -1,0 +1,72 @@
+"Lugar, día, rango horario:",22/03/2016 17:00 a 18:00   -   Paradas del 10/17/22 - Belgrano entre Mariano Acosta y España,,,,,,,,
+Línea,10,10,10,10,22,17,22,10,10
+Hora,17:11,17:14,17:15,17:18,17:21,17:24,17:24,17:24,17:30
+Tiempo Detenido (segundos),50,20,10,10,0,60,60,60,40
+Suben,20,3,0,1,0,20,20,20,10
+Bajan,4,8,4,5,0,3,0,0,4
+Vacio,,,,,,,,,
+"No vacío, asientos libres",x,x,x,x,,,,,
+"No completo, sin asientos",,,,,,x,x,x,x
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,x,,,,
+# Personas en la parada: (N°/C /NC),30,20,20,23,25,50,50,50,50
+,,,,,,,,,
+Línea,17,22,22,22,10,10,17,17,17
+Hora,17:30,17:31,17:31,17:35,17:38,17:40,17:45,17:55,17:58
+Tiempo Detenido (segundos),45,35,30,25,30,25,30,45,30
+Suben,12,5,6,6,10,9,12,14,6
+Bajan,3,2,3,10,2,4,2,12,8
+Vacio,,,,,,,,,
+"No vacío, asientos libres",,,,,,,,,
+"No completo, sin asientos",x,x,x,x,x,x,x,x,x
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),50,30,30,36,30,30,24,20,12
+,,,,,,,,,
+Línea,,,,,,,,,
+Hora,,,,,,,,,
+Tiempo Detenido (segundos),,,,,,,,,
+Suben,,,,,,,,,
+Bajan,,,,,,,,,
+Vacio,,,,,,,,,
+"No vacío, asientos libres",,,,,,,,,
+"No completo, sin asientos",,,,,,,,,
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),,,,,,,,,
+,,,,,,,,,
+Línea,,,,,,,,,
+Hora,,,,,,,,,
+Tiempo Detenido (segundos),,,,,,,,,
+Suben,,,,,,,,,
+Bajan,,,,,,,,,
+Vacio,,,,,,,,,
+"No vacío, asientos libres",,,,,,,,,
+"No completo, sin asientos",,,,,,,,,
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),,,,,,,,,
+,,,,,,,,,
+Línea,,,,,,,,,
+Hora,,,,,,,,,
+Tiempo Detenido (segundos),,,,,,,,,
+Suben,,,,,,,,,
+Bajan,,,,,,,,,
+Vacio,,,,,,,,,
+"No vacío, asientos libres",,,,,,,,,
+"No completo, sin asientos",,,,,,,,,
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),,,,,,,,,
+,,,,,,,,,
+Línea,,,,,,,,,
+Hora,,,,,,,,,
+Tiempo Detenido (segundos),,,,,,,,,
+Suben,,,,,,,,,
+Bajan,,,,,,,,,
+Vacio,,,,,,,,,
+"No vacío, asientos libres",,,,,,,,,
+"No completo, sin asientos",,,,,,,,,
+Completo,,,,,,,,,
+Tan completo que no se detiene,,,,,,,,,
+# Personas en la parada: (N°/C /NC),,,,,,,,,

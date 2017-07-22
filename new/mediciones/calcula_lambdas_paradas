@@ -1,0 +1,6 @@
+cd $(dirname $0)
+cat paradas.txt | while read p
+do
+  l=$(./lambda_parada $p) 
+  echo $p","$l
+done

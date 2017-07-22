@@ -1,0 +1,18 @@
+<additional>
+
+    <busStop id="p01" lane="-9468#2_0" startPos="127" endPos="139"/>
+    <busStop id="p02" lane="-9468#3_0" startPos="38" endPos="50"/>
+    <busStop id="p03" lane="-9468#3_0" startPos="53" endPos="65"/>
+    <busStop id="p04" lane="-9468#3_0" startPos="86" endPos="98"/>
+    <busStop id="p05" lane="-9468#4_0" startPos="2" endPos="14"/>
+    <busStop id="p06" lane="-9468#4_0" startPos="31" endPos="43"/>
+    <busStop id="p07" lane="-9468#4_0" startPos="44" endPos="56"/>
+    <busStop id="p08" lane="-9468#4_0" startPos="92" endPos="104"/>
+    <busStop id="p09" lane="-9468#5_0" startPos="63" endPos="75"/>
+    <busStop id="p10" lane="-9468#5_0" startPos="91" endPos="103"/>
+    <busStop id="p11" lane="-9468#6_0" startPos="46" endPos="58"/>
+    <busStop id="p12" lane="-9468#6_0" startPos="68" endPos="80"/>
+
+    <vType id="colectivo" vClass="bus" accel="2.6" decel="4.5" sigma="0" length="12" minGap="3" maxSpeed="70" color="1,1,0" guiShape="bus"/>
+
+</additional>

@@ -1,0 +1,5 @@
+<routes>
+  <route id="linea100" edges="26589743#0 26589743#1 26589743#2 26589743#3">
+    <!-- stop busStop="p1" duration="0"/ -->
+  </route>
+</routes>

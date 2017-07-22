@@ -1,0 +1,8 @@
+awk -F, '{tdet=$6+0.0;suben=$7+0.1; if (suben>10) {print "suben=",suben,"tdet=",tdet,"k="tdet/((suben*(suben+1))/2)}}' mediciones.txt
+
+awk -F, '{tdet=$6+0.0;suben=$7+0.1; print tdet/suben }' mediciones.txt 	| sort -n
+
+awk -F, 'BEGIN{s=0;s2=0;n=0}{tdet=$6+0.0;suben=$7+0.1; c=tdet/suben; if (c<100 && c!=0) {n++;s+=c;s2+=c^2} }END{ prom=s/n;sigma2=(s2/n-prom^2)*(n/(n-1));print prom,sigma2}' mediciones.txt
+
+awk -F, 'BEGIN{s=0;s2=0;n=0}{suben=$7;if (suben>0) {n++;s+=suben;s2+=suben^2} }END{ prom=s/n;sigma2=(s2/n-prom^2)*(n/(n-1));print prom,sigma2}' mediciones.txt 
+

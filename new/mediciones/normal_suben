@@ -1,0 +1,24 @@
+# ==========================================================
+# Calcula los parámetros de la ditribución normal que indica
+# cuantas personas suben en promedio a un colectivo
+# ==========================================================
+
+cd $(dirname $0)
+
+./selecciona mediciones.txt | awk -F, '{
+
+  if (NR==1) {
+    # Inicialización de variables
+    # ---------------------------
+    cant=0;sxi=0;s2xi
+  }
+
+  suben=$7
+  if (suben>0) {
+    cant++
+    xi=suben
+    sxi+=xi
+    s2xi+=xi^2
+  }
+} 
+END { print sxi/cant","cant/(cant-1)*(s2xi/cant-(sxi/cant)^2) }'

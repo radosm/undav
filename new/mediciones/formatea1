@@ -1,0 +1,69 @@
+# ==============================================================================
+# Formatea los csv para ser interpretados luego por la segunda fase del formateo
+# ==============================================================================
+
+ls *.csv | while read a
+do
+  awk '
+  BEGIN {
+    FPAT = "([^,]*)|(\"[^\"]*\")" # Formato de los campos en el CSV
+  }
+  {
+  
+  if (NR==1) {
+    f=FILENAME
+    sub(/^P/,"",f)
+    sub(/.csv/,"",f)
+    split(f,fa,/_/)
+    split(fa[3],fd,/:/)
+    split(fa[5],fh,/:/)
+    print "PARADA,"int(fa[1])
+    print "FECHA,"fa[2]
+    print "DESDE,"fd[1]*3600+fd[2]*60
+    print "HASTA,"fh[1]*3600+fh[2]*60
+  }
+
+  if ($1=="Línea" && $2=="") { exit } # No hay más mediciones en este archivo
+
+  p=0 # Este flag indica si la linea debe imprimirse (=1) o no (=0)
+
+  switch ($1) {
+    case /Hora/:
+      $1="HORA";p=1
+      for (i=2;i<=NF;i++) {
+        split($i,a,/:/)
+        segundos=a[1]*3600+a[2]*60
+        $i=segundos
+      }
+      break
+    case /Línea/:
+      $1="LINEA";p=1;break
+    case /Tiempo/:
+      $1="TDET";p=1;break
+    case /Suben/:
+      $1="SUBEN";p=1;break
+    case /Bajan/:
+      $1="BAJAN";p=1;break
+    case /# Personas/:
+      $1="CPERS";p=1;break
+    case /Vacio/:
+      $1="VACIO";p=1;break
+    case /No vacío/:
+      $1="NOVACIO";p=1;break
+    case /No completo/:
+      $1="SINASIENTOS";p=1;break
+    case /Completo/:
+      $1="COMPLETO";p=1;break
+    case /Tan completo/:
+      $1="NOSUBENADIE";p=1;break
+  } 
+
+  if (p==1) { # Interesa imprimir esta línea
+    for (i=1;i<=NF;i++) {
+      printf("%s",$i)
+        if (i<NF) printf(","); else print ""
+    }
+  }
+  
+  }' "$a"
+done

@@ -1,0 +1,10 @@
+# ==================================================================
+# Da la primer parada de una linea o de todas si no recibe parámetro
+# ==================================================================
+
+if [ "$1" ]; then
+  #cat mediciones.txt |sort -t, -k4,4n -k1,1n | awk -F, -v linea=$1 '{if ($4==linea) {print $1;exit}}'
+  cat mediciones.txt |sort -t, -k4,4n -k1,1n | ./selecciona - -linea $1 | head -1 | cut -d, -f1
+else
+  cat mediciones.txt |sort -t, -k4,4n -k1,1n | awk -F, 'BEGIN {ant=-1}{if ($4!=ant) {print $4","$1;ant=$4}}'
+fi

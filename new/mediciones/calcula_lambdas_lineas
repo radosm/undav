@@ -1,0 +1,6 @@
+cd $(dirname $0)
+cat lineas.txt | while read li
+do
+  la=$(./lambda_linea $li) 
+  echo $li","$la
+done

@@ -1,0 +1,9 @@
+# ================================
+# Genera el archivo mediciones.txt
+# ================================
+
+./formatea1 | ./formatea2 > mediciones.txt
+
+cut -d, -f1 mediciones.txt |sort -un > paradas.txt
+cut -d, -f4 mediciones.txt |sort -un > lineas.txt
+cut -d, -f1,4 mediciones.txt |sort -u |sort -t, -k2,2n -k1,1n > paradas_lineas.txt

@@ -1,0 +1,9 @@
+#
+# programa auxiliar, no cumple una función específica
+#
+grep  Lugar *csv | sed "s/.csv:/ /;s/horario:\",//"|cut -d" " -f1,5,6,7,8 #|awk '{
+ #split($2,a,/\//)
+ #f=a[3]a[2]a[1]
+ ##print $2,a[1],a[2],a[3],f
+ #print "mv "$1".xlsx "$1"_"f"_"$3"_"$4"_"$5".xlsx"
+ #}'

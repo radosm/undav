@@ -1,0 +1,29 @@
+# =============================================================
+# Calcula el lambda de llegada de colectivos a la primer parada
+# =============================================================
+
+linea=$1
+parada=$(./primerparada $linea)
+
+if [ ! "$linea" -o ! "$parada" ]; then
+  echo "error, no se encuentra la primer parada de la linea $linea">&2
+  exit 1
+fi
+
+./selecciona mediciones.txt -parada $parada -linea $linea | awk -F, '{
+
+  if (NR==1) {
+    # Inicialización de variables
+    # ---------------------------
+    ant=$3;dif=0;cant=0
+  }
+
+  ##print $0 #debug
+  cant++
+  hora=$5
+  ##print hora,ant,hora-ant #debug
+  dif+=hora-ant
+  ant=hora
+} 
+END { print (dif/cant) }'
+#END { print "lambda_linea_"linea"="(dif/cant)" (en segundos)." }'

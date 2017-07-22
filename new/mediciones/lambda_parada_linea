@@ -1,0 +1,61 @@
+# =========================================================
+# Calcula el mu de la cant personas que suben en una parada
+# =========================================================
+
+parada=$1
+linea=$2
+
+if [ ! "$parada" ]; then
+  echo "error, indicar parada">&2
+  exit 1
+fi
+
+if [ ! "$linea" ]; then
+  echo "error, indicar linea">&2
+  exit 1
+fi
+
+./selecciona mediciones.txt -parada $parada -linea $linea | awk -F, '{
+
+  hora=$5
+  suben=$7
+
+  if (NR==1) {
+    # Inicialización de variables
+    # ---------------------------
+    ant_hora=hora;cant_suben=0
+  } 
+
+  if (hora==ant_hora) { # Junto mediciones de la misma hora
+    cant_suben+=suben
+  } else {
+    print ant_hora","cant_suben
+    ant_hora=hora
+    cant_suben=suben
+  }
+} 
+END {
+  print ant_hora","cant_suben","cant_quedan
+}' | awk -F, -v parada=$parada '{
+  hora=$1
+  suben=$2
+  if (NR==1) {
+    ant_hora=hora
+    ant_suben=suben
+    mu=0
+    cant=0
+  } else {
+    dif_hora=hora-ant_hora
+    mu+=suben/dif_hora
+    cant++
+    ant_hora=hora
+    ant_suben=suben
+  }  
+} END {
+  #print "lambda_parada_"parada"_linea_"linea"="(mu/cant)"."
+  if (cant!=0) {
+    print (mu/cant)
+  } else {
+    print 0
+  }
+}'
